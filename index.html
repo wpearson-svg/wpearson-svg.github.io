@@ -1,14 +1,140 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Willis Pearson — Project Lead</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:wght@400;500&family=Work+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --night: #0F1626;
+    --deep: #182238;
+    --star: #F2EDE3;
+    --dim: #97A1B5;
+    --brass: #C79A4F;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--night);
+    color: var(--star);
+    font-family: "Work Sans", system-ui, sans-serif;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    display: flex;
+    flex-direction: column;
+  }
+  .wrap {
+    flex: 1;
+    width: 100%;
+    max-width: 44rem;
+    margin: 0 auto;
+    padding: clamp(3rem, 10vw, 6rem) clamp(1.25rem, 5vw, 2rem);
+    text-align: center;
+  }
+  .mark { width: clamp(4.5rem, 14vw, 6.5rem); height: auto; margin: 0 auto 2rem; display: block; }
+  h1 {
+    font-family: Spectral, Georgia, serif;
+    font-weight: 500;
+    font-size: clamp(2.2rem, 7vw, 3.4rem);
+    letter-spacing: -0.015em;
+    line-height: 1.1;
+    margin: 0 0 0.6rem;
+  }
+  .role { color: var(--brass); margin: 0 0 2rem; font-size: 1.05rem; }
+  .lede {
+    font-family: Spectral, Georgia, serif;
+    font-size: 1.2rem;
+    line-height: 1.75;
+    color: var(--star);
+    max-width: 32rem;
+    margin: 0 auto 3rem;
+  }
+  .rule {
+    width: 3rem;
+    height: 1px;
+    background: var(--brass);
+    border: 0;
+    margin: 0 auto 3rem;
+  }
+  .paths {
+    display: grid;
+    gap: 1px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    overflow: hidden;
+    text-align: left;
+  }
+  @media (min-width: 38rem) { .paths { grid-template-columns: 1fr 1fr; } }
+  .path {
+    background: var(--deep);
+    padding: 1.5rem;
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+  .path:hover { background: #1E2A44; }
+  .path:focus-visible { outline: 2px solid var(--brass); outline-offset: -2px; }
+  .path h2 {
+    font-family: Spectral, Georgia, serif;
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin: 0 0 0.35rem;
+  }
+  .path p { margin: 0; color: var(--dim); font-size: 0.95rem; }
+  footer {
+    padding: 0 1.5rem clamp(2rem, 6vw, 3rem);
+    text-align: center;
+  }
+  footer a {
+    color: var(--dim);
+    margin: 0 0.75rem;
+    text-underline-offset: 4px;
+  }
+  footer a:hover { color: var(--brass); }
+  footer a:focus-visible { outline: 2px solid var(--brass); outline-offset: 3px; border-radius: 2px; }
+</style>
 </head>
 <body>
-    <img src="SSC Simple Fancy Logo BW Swoosh.png" alt="SSC Simple Logo">
-    <p1><br></p1>
-    <a href="https://www.linkedin.com/in/willispearson3rd/">Willis Pearson</a>
-    <p2><br>Project Lead</p2>
+
+<div class="wrap">
+  <img class="mark" src="SSC Simple Fancy Logo BW Swoosh.png" alt="Second Star Collective logo">
+
+  <h1>Willis Pearson</h1>
+  <p class="role">Project lead &middot; Kansas City, MO</p>
+
+  <p class="lede">Deploying, implementing, and supporting other people&rsquo;s designs teaches you exactly which decisions cause problems later. I&rsquo;m bringing that to the design and build side.</p>
+
+  <hr class="rule">
+
+  <nav class="paths">
+    <a class="path" href="#work">
+      <h2>Work</h2>
+      <p>What I've led and delivered, and what I owned on each.</p>
+    </a>
+    <a class="path" href="#approach">
+      <h2>Approach</h2>
+      <p>How I think about delivery, teams, and accountability.</p>
+    </a>
+    <a class="path" href="https://www.linkedin.com/in/willispearson3rd/">
+      <h2>LinkedIn</h2>
+      <p>Full background and the longer version of the story.</p>
+    </a>
+    <a class="path" href="mailto:wpearson@icstars.org">
+      <h2>Get in touch</h2>
+      <p>Open to project and delivery management roles.</p>
+    </a>
+  </nav>
+</div>
+
+<footer>
+  <a href="https://github.com/wpearson-svg">GitHub</a>
+  <a href="mailto:wpearson@icstars.org">Email</a>
+</footer>
+
 </body>
 </html>
