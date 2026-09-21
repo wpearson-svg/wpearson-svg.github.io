@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Willis Pearson — Project Lead</title>
+<title>Willis Pearson — Change Management</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Spectral:wght@400;500&family=Work+Sans:wght@400;500&display=swap" rel="stylesheet">
@@ -14,6 +14,14 @@
     --star: #F2EDE3;
     --dim: #97A1B5;
     --brass: #C79A4F;
+
+    /* Expand/collapse timing. The script reads these, so CSS and JS stay in sync. */
+    --t-fade: 500ms;      /* other tiles fade out / back in */
+    --t-panel-out: 250ms; /* panel content fades out before collapsing */
+    --t-expand: 800ms;    /* container grows / shrinks */
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :root { --t-fade: 0ms; --t-panel-out: 0ms; --t-expand: 0ms; }
   }
   * { box-sizing: border-box; }
   body {
@@ -35,7 +43,7 @@
     padding: clamp(3rem, 10vw, 6rem) clamp(1.25rem, 5vw, 2rem);
     text-align: center;
   }
-  .mark { width: clamp(4.5rem, 14vw, 6.5rem); height: auto; margin: 0 auto 2rem; display: block; }
+  .mark { width: clamp(10rem, 32vw, 14rem); height: auto; margin: 0 auto 2rem; display: block; }
   h1 {
     font-family: Spectral, Georgia, serif;
     font-weight: 500;
@@ -63,11 +71,14 @@
   .paths {
     display: grid;
     gap: 1px;
-    background: rgba(255,255,255,0.08);
+    background-color: rgba(255,255,255,0.08);
     border: 1px solid rgba(255,255,255,0.08);
     border-radius: 12px;
     overflow: hidden;
     text-align: left;
+    align-items: stretch;
+    align-content: start;
+    transition: background-color var(--t-fade) ease;
   }
   @media (min-width: 38rem) { .paths { grid-template-columns: 1fr 1fr; } }
   .path {
@@ -76,9 +87,44 @@
     display: block;
     text-decoration: none;
     color: inherit;
+    width: 100%;
+    border: 0;
+    font: inherit;
+    text-align: left;
+    transition: opacity var(--t-fade) ease, background 0.2s ease;
+    overflow: hidden;
   }
-  .path:hover { background: #1E2A44; }
+  a.path { cursor: pointer; }
+  a.path:hover { background: #1E2A44; }
   .path:focus-visible { outline: 2px solid var(--brass); outline-offset: -2px; }
+
+  /* --- Generic expand/fade tile system ---
+     Any tile that can expand in place (Work, Approach, Portfolio, Get in
+     touch, future sections) gets class "path--expand" plus a unique
+     data-key. Only one is ever "active" (currently open) at a time.
+
+     Opening:  .is-fading (tiles fade out, container settles to one colour)
+               -> .is-expanded (the active tile spans the grid) while the
+                  script animates the container's height and the panel
+                  fades in.
+     Closing:  .is-closing (panel fades out) -> script animates the height
+               back -> .is-fading removed (tiles fade back in). */
+  .path--expand { padding: 0; }
+  .expand-trigger {
+    display: block;
+    width: 100%;
+    background: none;
+    border: 0;
+    padding: 1.5rem;
+    margin: 0;
+    font: inherit;
+    color: inherit;
+    text-align: left;
+    cursor: pointer;
+  }
+  .expand-trigger:hover { background: #1E2A44; }
+  .expand-trigger:focus-visible { outline: 2px solid var(--brass); outline-offset: -2px; }
+
   .path h2 {
     font-family: Spectral, Georgia, serif;
     font-size: 1.2rem;
@@ -86,55 +132,670 @@
     margin: 0 0 0.35rem;
   }
   .path p { margin: 0; color: var(--dim); font-size: 0.95rem; }
-  footer {
-    padding: 0 1.5rem clamp(2rem, 6vw, 3rem);
-    text-align: center;
+
+  .paths.is-fading .path:not(.path--active) {
+    opacity: 0;
+    pointer-events: none;
   }
-  footer a {
+  .paths.is-expanded .path:not(.path--active) { display: none; }
+  .paths.is-expanded .path--active {
+    grid-column: 1 / -1;
+    cursor: default;
+  }
+  .paths.is-expanded .path--active:hover { background: var(--deep); }
+
+  @keyframes fade-in  { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes fade-out { from { opacity: 1; } to { opacity: 0; } }
+
+  .expand-toggle-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .expand-back {
+    display: none;
+    background: none;
+    border: 0;
+    color: var(--brass);
+    font-family: "Work Sans", system-ui, sans-serif;
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 0;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    flex-shrink: 0;
+  }
+  .paths.is-expanded .path--active .expand-back {
+    display: inline-block;
+    animation: fade-in var(--t-fade) ease calc(var(--t-expand) * 0.25) both;
+  }
+  .paths.is-expanded .path--active .expand-toggle-row p { display: none; }
+
+  .expand-panel {
+    display: none;
+    padding: 0 1.5rem 1.5rem;
+  }
+  .expand-panel::before {
+    content: "";
+    display: block;
+    height: 1px;
+    background: rgba(255,255,255,0.08);
+    margin-bottom: 1.5rem;
+  }
+  .paths.is-expanded .path--active .expand-panel {
+    display: block;
+    animation: fade-in var(--t-fade) ease calc(var(--t-expand) * 0.25) both;
+  }
+  .paths.is-closing .path--active .expand-panel,
+  .paths.is-closing .path--active .expand-back {
+    animation: fade-out var(--t-panel-out) ease both;
+  }
+
+  /* Bottom "Back" link: only shown (via JS, per-tile) when the open panel
+     actually runs past the bottom of the viewport, so a short panel never
+     shows two Back links close together. */
+  .expand-back-bottom-wrap {
+    display: none;
+    margin-top: 2rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+  .path--active.needs-bottom-back .expand-back-bottom-wrap {
+    display: block;
+  }
+  .expand-back-bottom {
+    background: none;
+    border: 0;
+    color: var(--brass);
+    font-family: "Work Sans", system-ui, sans-serif;
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 0;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .expand-back-bottom:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
+
+  /* --- Work panel content (grouped by Love / Life / Legacy) --- */
+  .work-group { margin-bottom: 2rem; }
+  .work-group:last-child { margin-bottom: 0; }
+  .work-group-title {
+    font-family: Spectral, Georgia, serif;
+    font-weight: 500;
+    font-size: 0.95rem;
+    color: var(--brass);
+    margin: 0 0 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .work-group-pending {
+    margin: 0;
     color: var(--dim);
-    margin: 0 0.75rem;
-    text-underline-offset: 4px;
+    font-size: 0.95rem;
+    font-style: italic;
   }
-  footer a:hover { color: var(--brass); }
-  footer a:focus-visible { outline: 2px solid var(--brass); outline-offset: 3px; border-radius: 2px; }
+  .work-entry { margin-bottom: 2rem; }
+  .work-entry:last-child { margin-bottom: 0; }
+  .work-entry h3 {
+    font-family: Spectral, Georgia, serif;
+    font-weight: 500;
+    font-size: 1.1rem;
+    margin: 0 0 0.15rem;
+  }
+  .work-entry .meta {
+    color: var(--brass);
+    font-size: 0.9rem;
+    margin: 0 0 0.75rem;
+  }
+  .work-entry ul {
+    margin: 0;
+    padding-left: 1.1rem;
+    color: var(--dim);
+    font-size: 0.95rem;
+    line-height: 1.65;
+  }
+  .work-entry li { margin-bottom: 0.5rem; }
+  .work-entry li:last-child { margin-bottom: 0; }
+  .work-entry li strong { color: var(--star); font-weight: 500; }
+  .work-entry-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .work-entry-logo {
+    width: 15rem;
+    max-width: 40%;
+    height: auto;
+    margin: 0;
+    flex-shrink: 0;
+    opacity: 0.85;
+  }
+
+  /* --- Approach panel content (principles grouped by theme) --- */
+  .approach-group { margin-bottom: 2rem; }
+  .approach-group:last-child { margin-bottom: 0; }
+  .approach-group-title {
+    font-family: Spectral, Georgia, serif;
+    font-weight: 500;
+    font-size: 0.95rem;
+    color: var(--brass);
+    margin: 0 0 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .approach-item { margin-bottom: 1.5rem; }
+  .approach-item:last-child { margin-bottom: 0; }
+  .approach-phrase {
+    font-family: Spectral, Georgia, serif;
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: var(--star);
+    margin: 0 0 0.5rem;
+  }
+  .approach-context {
+    margin: 0 0 0.5rem;
+    color: var(--dim);
+    font-size: 0.95rem;
+    line-height: 1.65;
+  }
+  .approach-skills {
+    margin: 0;
+    color: var(--brass);
+    font-size: 0.82rem;
+    opacity: 0.85;
+  }
+
+  /* The "Moderation, in moderation" entry gets a visually distinct,
+     dictionary-style definition block — it earns different treatment
+     because the wordplay is the actual content, not just flavor. */
+  .approach-definitions {
+    margin: 0 0 0.85rem;
+    padding: 0.75rem 1rem;
+    background: rgba(255,255,255,0.04);
+    border-radius: 8px;
+  }
+  .approach-definition {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 0.4rem;
+    font-size: 0.9rem;
+  }
+  .approach-definition:last-child { margin-bottom: 0; }
+  .approach-definition dt {
+    font-style: italic;
+    font-weight: 500;
+    color: var(--star);
+  }
+  .approach-definition dd { margin: 0; color: var(--dim); }
+
+  /* --- Portfolio panel content (tangible outcomes, by engagement) --- */
+  .portfolio-entry { margin-bottom: 2rem; }
+  .portfolio-entry:last-of-type { margin-bottom: 1.5rem; }
+  .portfolio-entry h3 {
+    font-family: Spectral, Georgia, serif;
+    font-weight: 500;
+    font-size: 1.1rem;
+    margin: 0 0 0.85rem;
+  }
+  .portfolio-stat { margin-bottom: 0.85rem; }
+  .portfolio-stat:last-child { margin-bottom: 0; }
+  .portfolio-stat-label {
+    display: block;
+    color: var(--brass);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.2rem;
+  }
+  .portfolio-stat p {
+    margin: 0;
+    color: var(--dim);
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+  .portfolio-road-list {
+    margin: 0;
+    padding-left: 1.1rem;
+    color: var(--dim);
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+  .portfolio-road-list li { margin-bottom: 0.35rem; }
+  .portfolio-road-list li:last-child { margin-bottom: 0; }
+  .portfolio-pending {
+    margin: 0;
+    color: var(--dim);
+    font-size: 0.95rem;
+    font-style: italic;
+  }
+  .portfolio-github {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.06);
+    color: var(--dim);
+    text-decoration: none;
+  }
+  .portfolio-github:hover { color: var(--brass); background: rgba(255,255,255,0.1); }
+  .portfolio-github:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
+
+  /* --- Get in touch panel content --- */
+  .contact-item { margin-bottom: 1.25rem; }
+  .contact-item:last-child { margin-bottom: 0; }
+  .contact-label {
+    display: block;
+    color: var(--brass);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.2rem;
+  }
+  .contact-item p {
+    margin: 0;
+    color: var(--dim);
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+  .contact-item a {
+    color: var(--star);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .contact-item a:hover { color: var(--brass); }
 </style>
 </head>
 <body>
 
 <div class="wrap">
-  <img class="mark" src="SSC Simple Fancy Logo BW Swoosh.png" alt="Second Star Collective logo">
+  <svg class="mark" viewBox="-40 -40 722 460" role="img" aria-label="Willis Pearson monogram" fill="none" stroke="var(--star)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+      <g opacity="0.5">
+      <path d="M187.3,338.7 C188.4,338.7 191.9,338.9 194.0,339.0 C196.1,339.1 198.0,339.1 200.0,339.0 C202.0,338.9 204.0,338.5 206.0,338.3 C208.0,338.2 210.0,338.1 212.0,338.0 C214.0,337.9 216.0,338.0 218.0,338.0 C220.0,338.0 222.0,337.9 224.0,337.8 C226.0,337.6 228.0,337.2 230.0,337.1 C232.0,337.0 234.0,337.0 236.0,337.0 C238.0,337.0 240.0,337.1 242.0,337.0 C244.0,336.9 246.0,336.7 248.0,336.6 C250.0,336.4 252.0,336.1 254.0,336.0 C256.0,335.9 258.0,336.0 260.0,336.0 C262.0,336.0 264.0,336.0 266.0,336.0 C268.0,336.0 270.0,336.0 272.0,336.0 C274.0,336.0 276.0,336.0 278.0,335.9 C280.0,335.8 282.0,335.4 284.0,335.2 C286.0,335.1 288.0,335.0 290.0,335.0 C292.0,335.0 294.0,335.0 296.0,335.0 C298.0,335.0 300.0,335.0 302.0,335.0 C304.0,335.0 306.0,335.0 308.0,335.0 C310.0,335.0 312.0,335.1 314.0,335.0 C316.0,334.9 319.0,334.7 320.0,334.7" />
+      <path d="M71.0,212.0 C70.0,212.3 67.0,213.5 65.0,214.0 C63.0,214.5 61.0,214.4 59.0,214.8 C57.0,215.2 55.0,215.8 53.0,216.4 C51.0,217.1 49.0,218.0 47.0,218.9 C45.0,219.8 43.0,220.7 41.0,221.8 C39.0,222.8 37.0,223.8 35.0,225.1 C33.0,226.4 31.0,227.8 29.0,229.4 C27.0,231.1 24.9,233.1 23.1,235.0 C21.3,236.9 19.7,239.0 18.2,241.0 C16.8,243.0 15.5,245.0 14.3,247.0 C13.2,249.0 12.2,251.0 11.2,253.0 C10.2,255.0 9.2,257.0 8.4,259.0 C7.7,261.0 7.1,263.0 6.6,265.0 C6.0,267.0 5.6,269.0 5.3,271.0 C5.0,273.0 4.9,275.0 4.7,277.0 C4.4,279.0 4.0,281.0 4.0,283.0 C4.0,285.0 4.3,287.0 4.4,289.0 C4.6,291.0 4.8,293.0 5.1,295.0 C5.4,297.0 5.8,299.0 6.3,301.0 C6.9,303.0 7.6,305.0 8.3,307.0 C9.1,309.0 9.9,311.0 10.8,313.0 C11.7,315.0 12.7,317.0 13.9,319.0 C15.1,321.0 16.3,323.0 17.8,325.0 C19.3,327.0 21.1,329.0 23.0,331.0 C24.9,333.0 27.0,335.0 29.0,336.8 C31.0,338.5 33.0,340.1 35.0,341.6 C37.0,343.0 39.0,344.1 41.0,345.2 C43.0,346.3 45.0,347.2 47.0,348.0 C49.0,348.8 51.0,349.6 53.0,350.2 C55.0,350.9 57.0,351.5 59.0,352.0 C61.0,352.5 63.0,352.8 65.0,353.0 C67.0,353.2 69.0,353.1 71.0,353.0 C73.0,352.9 75.0,352.7 77.0,352.4 C79.0,352.2 81.0,351.7 83.0,351.3 C85.0,351.0 87.0,350.6 89.0,350.2 C91.0,349.9 93.0,349.4 95.0,349.1 C97.0,348.8 99.0,348.5 101.0,348.2 C103.0,347.9 105.0,347.7 107.0,347.4 C109.0,347.2 111.0,346.9 113.0,346.6 C115.0,346.3 117.0,345.9 119.0,345.7 C121.0,345.4 123.0,345.1 125.0,344.9 C127.0,344.6 129.0,344.4 131.0,344.2 C133.0,344.0 135.0,343.8 137.0,343.6 C139.0,343.4 141.0,343.2 143.0,343.0 C145.0,342.8 147.0,342.5 149.0,342.3 C151.0,342.2 153.0,342.2 155.0,342.0 C157.0,341.8 159.0,341.5 161.0,341.3 C163.0,341.2 165.0,341.1 167.0,341.0 C169.0,340.9 171.0,340.7 173.0,340.6 C175.0,340.4 177.0,340.1 179.0,340.0 C181.0,339.9 183.6,340.2 185.0,340.0 C186.4,339.8 186.9,338.9 187.3,338.7" />
+      <path d="M453.7,40.3 C452.6,40.3 449.1,40.1 447.0,40.0 C444.9,39.9 443.0,39.9 441.0,40.0 C439.0,40.1 437.0,40.2 435.0,40.3 C433.0,40.5 431.0,40.9 429.0,41.0 C427.0,41.1 425.0,41.0 423.0,41.0 C421.0,41.0 419.0,40.9 417.0,41.0 C415.0,41.1 413.0,41.2 411.0,41.3 C409.0,41.5 407.0,41.9 405.0,42.0 C403.0,42.1 401.0,42.0 399.0,42.0 C397.0,42.0 395.0,42.0 393.0,42.0 C391.0,42.0 389.0,42.0 387.0,42.0 C385.0,42.0 383.0,41.9 381.0,42.0 C379.0,42.1 377.0,42.3 375.0,42.4 C373.0,42.6 371.0,42.9 369.0,43.0 C367.0,43.1 365.0,43.0 363.0,43.0 C361.0,43.0 359.0,43.0 357.0,43.0 C355.0,43.0 353.0,43.0 351.0,43.0 C349.0,43.0 347.0,43.0 345.0,43.0 C343.0,43.0 341.0,43.0 339.0,43.0 C337.0,43.0 335.0,43.0 333.0,43.0 C331.0,43.0 329.2,42.9 327.0,43.0 C324.8,43.1 321.2,43.3 320.0,43.3" />
+      <path d="M320.0,334.7 C320.0,333.6 320.0,330.1 320.0,328.0 C320.0,325.9 320.0,324.0 320.0,322.0 C320.0,320.0 320.0,318.0 320.0,316.0 C320.0,314.0 320.0,312.0 320.0,310.0 C320.0,308.0 320.0,306.0 320.0,304.0 C320.0,302.0 320.0,300.0 320.0,298.0 C320.0,296.0 320.0,294.0 320.0,292.0 C320.0,290.0 320.0,288.0 320.0,286.0 C320.0,284.0 320.0,282.0 320.0,280.0 C320.0,278.0 320.0,276.0 320.0,274.0 C320.0,272.0 320.0,270.0 320.0,268.0 C320.0,266.0 320.0,264.0 320.0,262.0 C320.0,260.0 320.0,258.0 320.0,256.0 C320.0,254.0 320.0,252.0 320.0,250.0 C320.0,248.0 320.0,246.0 320.0,244.0 C320.0,242.0 320.0,240.0 320.0,238.0 C320.0,236.0 320.0,234.0 320.0,232.0 C320.0,230.0 320.0,228.0 320.0,226.0 C320.0,224.0 320.0,222.0 320.0,220.0 C320.0,218.0 320.0,216.0 320.0,214.0 C320.0,212.0 320.0,210.0 320.0,208.0 C320.0,206.0 320.0,204.0 320.0,202.0 C320.0,200.0 320.0,198.0 320.0,196.0 C320.0,194.0 320.0,192.0 320.0,190.0 C320.0,188.0 320.0,186.0 320.0,184.0 C320.0,182.0 320.0,180.0 320.0,178.0 C320.0,176.0 320.0,174.0 320.0,172.0 C320.0,170.0 320.0,168.0 320.0,166.0 C320.0,164.0 320.0,162.0 320.0,160.0 C320.0,158.0 320.0,156.0 320.0,154.0 C320.0,152.0 320.0,150.0 320.0,148.0 C320.0,146.0 320.0,144.0 320.0,142.0 C320.0,140.0 320.0,138.0 320.0,136.0 C320.0,134.0 320.0,132.0 320.0,130.0 C320.0,128.0 320.0,126.0 320.0,124.0 C320.0,122.0 320.0,120.0 320.0,118.0 C320.0,116.0 320.0,114.0 320.0,112.0 C320.0,110.0 320.0,108.0 320.0,106.0 C320.0,104.0 320.0,102.0 320.0,100.0 C320.0,98.0 320.0,96.0 320.0,94.0 C320.0,92.0 320.0,90.0 320.0,88.0 C320.0,86.0 320.0,84.0 320.0,82.0 C320.0,80.0 320.0,78.0 320.0,76.0 C320.0,74.0 320.0,72.0 320.0,70.0 C320.0,68.0 320.0,66.0 320.0,64.0 C320.0,62.0 320.0,60.0 320.0,58.0 C320.0,56.0 320.0,54.0 320.0,52.0 C320.0,50.0 320.0,47.4 320.0,46.0 C320.0,44.6 320.0,43.8 320.0,43.3" />
+      <path d="M320.0,334.7 C321.2,334.7 324.8,334.9 327.0,335.0 C329.2,335.1 331.0,335.0 333.0,335.0 C335.0,335.0 337.0,335.0 339.0,335.0 C341.0,335.0 343.0,335.0 345.0,335.0 C347.0,335.0 349.0,335.0 351.0,335.0 C353.0,335.0 355.0,335.0 357.0,335.1 C359.0,335.2 361.0,335.6 363.0,335.8 C365.0,335.9 367.0,336.0 369.0,336.0 C371.0,336.0 373.0,336.0 375.0,336.0 C377.0,336.0 379.0,336.0 381.0,336.0 C383.0,336.0 385.0,335.9 387.0,336.0 C389.0,336.1 391.0,336.3 393.0,336.4 C395.0,336.6 397.0,336.9 399.0,337.0 C401.0,337.1 403.0,337.0 405.0,337.0 C407.0,337.0 409.0,336.9 411.0,337.0 C413.0,337.1 415.0,337.5 417.0,337.7 C419.0,337.8 421.0,337.9 423.0,338.0 C425.0,338.1 427.0,337.9 429.0,338.0 C431.0,338.1 433.0,338.2 435.0,338.3 C437.0,338.5 439.0,338.9 441.0,339.0 C443.0,339.1 444.9,339.1 447.0,338.9 C449.1,338.7 452.6,338.1 453.7,338.0" />
+      <path d="M453.7,40.3 C454.1,41.4 454.9,44.9 456.1,47.0 C457.3,49.1 459.1,51.0 460.7,53.0 C462.3,55.0 464.1,57.0 465.8,59.0 C467.5,61.0 469.2,63.0 470.9,65.0 C472.6,67.0 474.3,69.0 475.8,71.0 C477.3,73.0 478.6,75.0 480.0,77.0 C481.4,79.0 482.7,81.0 484.0,83.0 C485.3,85.0 486.6,87.0 487.8,89.0 C489.0,91.0 490.2,93.0 491.3,95.0 C492.5,97.0 493.6,99.0 494.7,101.0 C495.7,103.0 496.6,105.0 497.6,107.0 C498.5,109.0 499.3,111.0 500.1,113.0 C500.9,115.0 501.7,117.0 502.4,119.0 C503.2,121.0 504.0,123.0 504.7,125.0 C505.4,127.0 506.1,129.0 506.7,131.0 C507.3,133.0 507.8,135.0 508.3,137.0 C508.9,139.0 509.4,141.0 509.9,143.0 C510.4,145.0 510.7,147.0 511.1,149.0 C511.5,151.0 511.9,153.0 512.2,155.0 C512.6,157.0 512.9,159.0 513.2,161.0 C513.5,163.0 513.7,165.0 514.0,167.0 C514.3,169.0 514.6,171.0 514.8,173.0 C514.9,175.0 515.0,177.0 515.0,179.0 C515.0,181.0 515.0,183.0 515.0,185.0 C515.0,187.0 515.0,189.0 515.0,191.0 C515.0,193.0 515.0,195.0 515.0,197.0 C515.0,199.0 515.1,201.0 515.0,203.0 C514.9,205.0 514.7,207.0 514.4,209.0 C514.2,211.0 513.9,213.0 513.6,215.0 C513.2,217.0 512.9,219.0 512.6,221.0 C512.2,223.0 511.9,225.0 511.6,227.0 C511.2,229.0 511.0,231.0 510.6,233.0 C510.1,235.0 509.6,237.0 509.1,239.0 C508.6,241.0 508.1,243.0 507.6,245.0 C507.0,247.0 506.3,249.0 505.7,251.0 C505.0,253.0 504.3,255.0 503.6,257.0 C502.8,259.0 502.1,261.0 501.3,263.0 C500.6,265.0 499.7,267.0 498.9,269.0 C498.0,271.0 497.2,273.0 496.2,275.0 C495.2,277.0 494.1,279.0 493.0,281.0 C491.9,283.0 490.7,285.0 489.6,287.0 C488.4,289.0 487.2,291.0 486.0,293.0 C484.8,295.0 483.6,297.0 482.3,299.0 C481.0,301.0 479.6,303.0 478.1,305.0 C476.6,307.0 475.1,309.0 473.6,311.0 C472.0,313.0 470.3,315.0 468.7,317.0 C467.0,319.0 465.3,321.0 463.6,323.0 C461.8,325.0 459.6,327.0 458.2,329.0 C456.8,331.0 455.8,333.5 455.0,335.0 C454.2,336.5 453.9,337.5 453.7,338.0" />
+      <path d="M570.0,166.0 C571.0,165.8 574.0,165.1 576.0,164.7 C578.0,164.3 580.0,164.0 582.0,163.6 C584.0,163.1 586.0,162.7 588.0,162.1 C590.0,161.5 592.0,160.7 594.0,159.9 C596.0,159.1 598.0,158.2 600.0,157.1 C602.0,156.0 604.0,154.6 606.0,153.2 C608.0,151.8 610.0,150.4 612.0,148.7 C614.0,147.0 616.1,144.9 617.9,143.0 C619.7,141.1 621.4,139.0 622.9,137.0 C624.4,135.0 625.7,133.0 626.9,131.0 C628.1,129.0 629.2,127.0 630.1,125.0 C631.0,123.0 631.8,121.0 632.4,119.0 C633.1,117.0 633.6,115.0 634.1,113.0 C634.6,111.0 635.2,109.0 635.6,107.0 C635.9,105.0 635.9,103.0 636.0,101.0 C636.1,99.0 636.0,97.0 636.0,95.0 C636.0,93.0 636.1,91.0 636.0,89.0 C635.9,87.0 635.7,85.0 635.3,83.0 C635.0,81.0 634.5,79.0 633.9,77.0 C633.3,75.0 632.6,73.0 631.9,71.0 C631.2,69.0 630.4,67.0 629.6,65.0 C628.7,63.0 627.8,61.0 626.6,59.0 C625.4,57.0 623.9,55.0 622.3,53.0 C620.7,51.0 618.9,48.9 617.0,47.0 C615.1,45.1 613.0,43.0 611.0,41.3 C609.0,39.6 607.0,38.1 605.0,36.8 C603.0,35.4 601.0,34.3 599.0,33.2 C597.0,32.1 595.0,31.1 593.0,30.2 C591.0,29.3 589.0,28.5 587.0,27.9 C585.0,27.3 583.0,26.8 581.0,26.4 C579.0,26.1 577.0,26.0 575.0,25.8 C573.0,25.6 571.0,25.3 569.0,25.3 C567.0,25.4 565.0,25.7 563.0,26.1 C561.0,26.5 559.0,27.1 557.0,27.6 C555.0,28.0 553.0,28.6 551.0,29.0 C549.0,29.4 547.0,29.7 545.0,30.0 C543.0,30.3 541.0,30.5 539.0,30.8 C537.0,31.1 535.0,31.4 533.0,31.7 C531.0,31.9 529.0,32.1 527.0,32.3 C525.0,32.6 523.0,32.8 521.0,33.0 C519.0,33.2 517.0,33.5 515.0,33.7 C513.0,33.9 511.0,33.9 509.0,34.1 C507.0,34.3 505.0,34.6 503.0,34.8 C501.0,35.0 499.0,35.1 497.0,35.3 C495.0,35.5 493.0,35.8 491.0,36.0 C489.0,36.2 487.0,36.3 485.0,36.4 C483.0,36.6 481.0,36.8 479.0,37.0 C477.0,37.2 475.0,37.4 473.0,37.6 C471.0,37.7 469.0,37.8 467.0,38.0 C465.0,38.2 463.0,38.4 461.0,38.6 C459.0,38.7 456.2,38.7 455.0,39.0 C453.8,39.3 453.9,40.1 453.7,40.3" />
+      <path d="M188.0,41.0 C187.0,40.6 184.0,39.4 182.0,38.9 C180.0,38.4 178.0,38.4 176.0,38.2 C174.0,38.1 172.0,38.1 170.0,37.9 C168.0,37.7 166.0,37.4 164.0,37.2 C162.0,37.0 160.0,37.0 158.0,36.8 C156.0,36.6 154.0,36.3 152.0,36.1 C150.0,35.9 148.0,35.9 146.0,35.7 C144.0,35.5 142.0,35.2 140.0,35.0 C138.0,34.8 136.0,34.6 134.0,34.4 C132.0,34.3 130.0,34.2 128.0,34.0 C126.0,33.8 124.0,33.6 122.0,33.3 C120.0,33.1 118.0,32.9 116.0,32.7 C114.0,32.4 112.0,32.2 110.0,32.0 C108.0,31.8 106.0,31.6 104.0,31.3 C102.0,31.1 100.0,30.7 98.0,30.4 C96.0,30.1 94.0,29.9 92.0,29.6 C90.0,29.2 88.0,28.9 86.0,28.6 C84.0,28.2 82.0,27.9 80.0,27.6 C78.0,27.2 76.0,26.8 74.0,26.4 C72.0,26.1 70.0,25.7 68.0,25.3 C66.0,25.0 64.0,24.6 62.0,24.2 C60.0,23.8 58.0,23.3 56.0,22.9 C54.0,22.4 52.0,22.0 50.0,21.6 C48.0,21.1 46.0,20.7 44.0,20.2 C42.0,19.8 40.0,19.4 38.0,18.9 C36.0,18.4 34.0,17.7 32.0,17.0 C30.0,16.3 28.0,15.6 26.0,14.9 C24.0,14.1 22.0,13.4 20.0,12.6 C18.0,11.7 16.0,10.8 14.0,9.8 C12.0,8.8 10.0,7.7 8.0,6.4 C6.0,5.1 3.3,3.1 2.0,2.0 C0.7,0.9 0.3,0.3 0.0,0.0" />
+      <path d="M188.0,41.0 C189.0,40.8 192.0,40.2 194.0,40.0 C196.0,39.8 198.0,39.9 200.0,40.0 C202.0,40.1 204.0,40.3 206.0,40.4 C208.0,40.6 210.0,40.9 212.0,41.0 C214.0,41.1 216.0,41.0 218.0,41.0 C220.0,41.0 222.0,40.9 224.0,41.0 C226.0,41.1 228.0,41.3 230.0,41.4 C232.0,41.6 234.0,41.9 236.0,42.0 C238.0,42.1 240.0,42.0 242.0,42.0 C244.0,42.0 246.0,42.0 248.0,42.0 C250.0,42.0 252.0,42.0 254.0,42.0 C256.0,42.0 258.0,41.9 260.0,42.0 C262.0,42.1 264.0,42.4 266.0,42.6 C268.0,42.7 270.0,42.9 272.0,43.0 C274.0,43.1 276.0,43.0 278.0,43.0 C280.0,43.0 282.0,43.0 284.0,43.0 C286.0,43.0 288.0,43.0 290.0,43.0 C292.0,43.0 294.0,43.0 296.0,43.0 C298.0,43.0 300.0,43.0 302.0,43.0 C304.0,43.0 306.0,43.0 308.0,43.0 C310.0,43.0 312.0,42.9 314.0,43.0 C316.0,43.1 319.0,43.3 320.0,43.3" />
+      <path d="M188.0,41.0 C187.5,42.0 186.4,45.0 185.1,47.0 C183.9,49.0 182.2,51.0 180.6,53.0 C178.9,55.0 177.0,57.0 175.2,59.0 C173.5,61.0 171.8,63.0 170.1,65.0 C168.4,67.0 166.8,69.0 165.2,71.0 C163.7,73.0 162.2,75.0 160.8,77.0 C159.4,79.0 158.0,81.0 156.7,83.0 C155.4,85.0 154.1,87.0 152.9,89.0 C151.7,91.0 150.6,93.0 149.4,95.0 C148.3,97.0 147.2,99.0 146.2,101.0 C145.2,103.0 144.3,105.0 143.3,107.0 C142.4,109.0 141.5,111.0 140.7,113.0 C139.8,115.0 139.0,117.0 138.2,119.0 C137.4,121.0 136.7,123.0 136.0,125.0 C135.3,127.0 134.8,129.0 134.2,131.0 C133.6,133.0 133.0,135.0 132.4,137.0 C131.9,139.0 131.3,141.0 130.8,143.0 C130.2,145.0 129.7,147.0 129.2,149.0 C128.8,151.0 128.4,153.0 128.0,155.0 C127.6,157.0 127.4,159.0 127.1,161.0 C126.8,163.0 126.5,165.0 126.3,167.0 C126.1,169.0 126.1,171.0 126.0,173.0 C125.9,175.0 126.1,177.0 126.0,179.0 C125.9,181.0 125.5,183.0 125.3,185.0 C125.2,187.0 124.9,189.0 125.0,191.0 C125.1,193.0 125.5,195.0 125.7,197.0 C125.8,199.0 125.9,201.0 126.0,203.0 C126.1,205.0 125.9,207.0 126.0,209.0 C126.1,211.0 126.4,213.0 126.7,215.0 C126.9,217.0 127.2,219.0 127.6,221.0 C127.9,223.0 128.2,225.0 128.6,227.0 C128.9,229.0 129.4,231.0 129.9,233.0 C130.4,235.0 131.0,237.0 131.6,239.0 C132.1,241.0 132.7,243.0 133.3,245.0 C133.9,247.0 134.5,249.0 135.1,251.0 C135.7,253.0 136.4,255.0 137.1,257.0 C137.8,259.0 138.6,261.0 139.4,263.0 C140.3,265.0 141.1,267.0 142.0,269.0 C142.9,271.0 143.8,273.0 144.8,275.0 C145.7,277.0 146.7,279.0 147.8,281.0 C148.8,283.0 150.0,285.0 151.1,287.0 C152.2,289.0 153.4,291.0 154.6,293.0 C155.8,295.0 157.0,297.0 158.3,299.0 C159.7,301.0 161.1,303.0 162.7,305.0 C164.2,307.0 165.8,309.0 167.4,311.0 C169.1,313.0 170.6,315.0 172.3,317.0 C174.0,319.0 175.8,321.0 177.6,323.0 C179.3,325.0 181.3,327.0 182.9,329.0 C184.5,331.0 186.3,333.4 187.0,335.0 C187.7,336.6 187.3,338.1 187.3,338.7" />
+      <path d="M453.7,338.0 C454.7,338.3 457.9,339.6 460.0,340.0 C462.1,340.4 464.0,340.1 466.0,340.2 C468.0,340.4 470.0,340.8 472.0,340.9 C474.0,341.0 476.0,340.9 478.0,341.0 C480.0,341.1 482.0,341.5 484.0,341.7 C486.0,341.8 488.0,341.8 490.0,342.0 C492.0,342.2 494.0,342.5 496.0,342.7 C498.0,342.9 500.0,343.0 502.0,343.2 C504.0,343.4 506.0,343.7 508.0,343.9 C510.0,344.1 512.0,344.3 514.0,344.6 C516.0,344.8 518.0,345.1 520.0,345.3 C522.0,345.6 524.0,345.9 526.0,346.2 C528.0,346.5 530.0,346.7 532.0,347.0 C534.0,347.3 536.0,347.5 538.0,347.8 C540.0,348.0 542.0,348.3 544.0,348.6 C546.0,348.8 548.0,349.1 550.0,349.4 C552.0,349.7 554.0,350.0 556.0,350.3 C558.0,350.6 560.0,350.9 562.0,351.2 C564.0,351.5 566.0,351.8 568.0,352.1 C570.0,352.4 572.0,352.8 574.0,353.2 C576.0,353.6 578.0,354.0 580.0,354.4 C582.0,354.9 584.0,355.2 586.0,355.7 C588.0,356.1 590.0,356.6 592.0,357.1 C594.0,357.6 596.0,358.2 598.0,358.8 C600.0,359.3 602.0,359.9 604.0,360.4 C606.0,361.0 608.0,361.5 610.0,362.1 C612.0,362.7 614.0,363.4 616.0,364.2 C618.0,365.0 620.0,365.9 622.0,366.8 C624.0,367.7 626.0,368.7 628.0,369.8 C630.0,370.8 632.2,371.8 634.0,373.0 C635.8,374.2 638.2,376.3 639.0,377.0" />
+      </g>
+      <g>
+      <path d="M 187.3,323.7 L 190.5,335.5 L 202.3,338.7 L 190.5,341.8 L 187.3,353.7 L 184.2,341.8 L 172.3,338.7 L 184.2,335.5 Z" fill="var(--star)" />
+      <path d="M 320.0,319.7 L 323.2,331.5 L 335.0,334.7 L 323.2,337.8 L 320.0,349.7 L 316.8,337.8 L 305.0,334.7 L 316.8,331.5 Z" fill="var(--star)" />
+      <path d="M 71.0,197.0 L 74.2,208.8 L 86.0,212.0 L 74.2,215.2 L 71.0,227.0 L 67.8,215.2 L 56.0,212.0 L 67.8,208.8 Z" fill="var(--star)" />
+      <path d="M 453.7,25.3 L 456.8,37.2 L 468.7,40.3 L 456.8,43.5 L 453.7,55.3 L 450.5,43.5 L 438.7,40.3 L 450.5,37.2 Z" fill="var(--star)" />
+      <path d="M 320.0,28.3 L 323.2,40.2 L 335.0,43.3 L 323.2,46.5 L 320.0,58.3 L 316.8,46.5 L 305.0,43.3 L 316.8,40.2 Z" fill="var(--star)" />
+      <path d="M 453.7,323.0 L 456.8,334.8 L 468.7,338.0 L 456.8,341.2 L 453.7,353.0 L 450.5,341.2 L 438.7,338.0 L 450.5,334.8 Z" fill="var(--star)" />
+      <path d="M 570.0,151.0 L 573.2,162.8 L 585.0,166.0 L 573.2,169.2 L 570.0,181.0 L 566.8,169.2 L 555.0,166.0 L 566.8,162.8 Z" fill="var(--star)" />
+      <path d="M 188.0,26.0 L 191.2,37.8 L 203.0,41.0 L 191.2,44.2 L 188.0,56.0 L 184.8,44.2 L 173.0,41.0 L 184.8,37.8 Z" fill="var(--star)" />
+      <path d="M 0.0,-15.0 L 3.2,-3.2 L 15.0,0.0 L 3.2,3.2 L 0.0,15.0 L -3.2,3.2 L -15.0,0.0 L -3.2,-3.2 Z" fill="var(--star)" />
+      <path d="M 639.0,362.0 L 642.2,373.8 L 654.0,377.0 L 642.2,380.2 L 639.0,392.0 L 635.8,380.2 L 624.0,377.0 L 635.8,373.8 Z" fill="var(--star)" />
+      </g>
+    </svg>
 
   <h1>Willis Pearson</h1>
-  <p class="role">Project lead &middot; Kansas City, MO</p>
+  <p class="role">Change Management &middot; Kansas City, MO</p>
 
-  <p class="lede">Deploying, implementing, and supporting other people&rsquo;s designs teaches you exactly which decisions cause problems later. I&rsquo;m bringing that to the design and build side.</p>
+  <p class="lede">Standing up a system I didn&rsquo;t choose, then training the people who had to live with it, showed me firsthand where that kind of change can go wrong. I&rsquo;m working toward shaping those plans, not just carrying them out.</p>
 
   <hr class="rule">
 
-  <nav class="paths">
-    <a class="path" href="#work">
-      <h2>Work</h2>
-      <p>What I've led and delivered, and what I owned on each.</p>
-    </a>
-    <a class="path" href="#approach">
-      <h2>Approach</h2>
-      <p>How I think about delivery, teams, and accountability.</p>
-    </a>
-    <a class="path" href="https://www.linkedin.com/in/willispearson3rd/">
-      <h2>LinkedIn</h2>
-      <p>Full background and the longer version of the story.</p>
-    </a>
-    <a class="path" href="mailto:wpearson@icstars.org">
-      <h2>Get in touch</h2>
-      <p>Open to project and delivery management roles.</p>
-    </a>
+  <nav class="paths" id="paths">
+    <div class="path path--expand" data-key="work">
+      <button type="button" class="expand-trigger" data-key="work" aria-expanded="false" aria-controls="workPanel">
+        <div class="expand-toggle-row">
+          <h2>Story</h2>
+          <span class="expand-back">&larr; Back</span>
+        </div>
+        <p>Love, Life, Legacy.</p>
+      </button>
+
+      <div class="expand-panel" id="workPanel">
+        <div class="work-group">
+          <h3 class="work-group-title">Love</h3>
+          <p class="work-group-pending">Coming soon.</p>
+        </div>
+
+        <div class="work-group">
+          <h3 class="work-group-title">Life</h3>
+          <div class="work-entry">
+            <h3>Champion National Security</h3>
+            <p class="meta">Operational Technology Specialist &middot; 2017&ndash;2019</p>
+            <ul>
+              <li>Started on the front-line learning TrackTik, the scheduling and reporting platform brought in to replace the company's legacy system and became the team's go-to resource on it.</li>
+              <li>Worked directly under the company president, Jason P. Carroll, to plan a six-month rollout to the wider organization.</li>
+              <li>When a major client wanted the switch fast, helped re-plan and execute that rollout in six weeks instead, without dropping the training that made adoption stick.</li>
+              <li>Worked through real resistance from long-time users of the legacy software, adjusting how the training was delivered branch by branch rather than treating it as one-size-fits-all.</li>
+              <li>Became the in-house TrackTik expert, flying to branches across the country to train staff and open new locations on the system directly.</li>
+              <li>Served as the liaison between the company president and TrackTik's own team &mdash; requesting features, reporting issues, and tracking progress on both sides.</li>
+            </ul>
+          </div>
+          <div class="work-entry">
+            <div class="work-entry-head">
+              <div>
+                <h3>Technology Intern, i.c.stars</h3>
+                <p class="meta">Second Star Collective &middot; Project Lead</p>
+              </div>
+              <img class="work-entry-logo" src="SSC Simple Fancy Logo BW Swoosh.png" alt="Second Star Collective logo">
+            </div>
+            <ul>
+              <li>Building an AI-enabled support agent prototype for a national member association.</li>
+              <li>Working as part of a small team, contributing to project decisions and weighing feasibility against what the client's requirements call for.</li>
+              <li>Preparing and prioritizing client-facing questions ahead of live Q&amp;A sessions with the client's team.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="work-group">
+          <h3 class="work-group-title">Legacy</h3>
+          <p class="work-group-pending">Coming soon.</p>
+        </div>
+
+        <div class="expand-back-bottom-wrap">
+          <button type="button" class="expand-back-bottom" data-key="work">&larr; Back</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="path path--expand" data-key="approach">
+      <button type="button" class="expand-trigger" data-key="approach" aria-expanded="false" aria-controls="approachPanel">
+        <div class="expand-toggle-row">
+          <h2>Approach</h2>
+          <span class="expand-back">&larr; Back</span>
+        </div>
+        <p>On process, people, principle.</p>
+      </button>
+
+      <div class="expand-panel" id="approachPanel">
+        <div class="approach-group">
+          <h3 class="approach-group-title">Process</h3>
+
+          <div class="approach-item">
+            <p class="approach-phrase">&ldquo;Slow is smooth, smooth is fast.&rdquo;</p>
+            <p class="approach-context">Compressed timelines don&rsquo;t fail because they&rsquo;re fast. They fail because something load-bearing got skipped to make them fast. The schedule can shrink; the sequence can&rsquo;t.</p>
+            <p class="approach-skills">Skills: schedule compression, risk triage, phased rollout planning</p>
+          </div>
+
+          <div class="approach-item">
+            <p class="approach-phrase">&ldquo;Only promise what you know you can deliver. Deliver more than you promised.&rdquo;</p>
+            <p class="approach-context">A commitment you&rsquo;re not confident in isn&rsquo;t ambition, it&rsquo;s a risk you&rsquo;re quietly handing to whoever&rsquo;s counting on it. Trust gets built by never missing the number you actually gave someone, then clearing it anyway.</p>
+            <p class="approach-skills">Skills: expectation management, stakeholder trust, delivery commitments</p>
+          </div>
+        </div>
+
+        <div class="approach-group">
+          <h3 class="approach-group-title">People</h3>
+
+          <div class="approach-item">
+            <p class="approach-phrase">&ldquo;You can&rsquo;t help people by shouting from the top of the ladder &mdash; you have to meet them where they are.&rdquo;</p>
+            <p class="approach-context">Authority gets compliance. It doesn&rsquo;t get buy-in. The people closest to the disruption need to hear it in terms of their own workflow, not a mandate from three levels up.</p>
+            <p class="approach-skills">Skills: change adoption, audience-adapted communication, stakeholder buy-in</p>
+          </div>
+
+          <div class="approach-item">
+            <p class="approach-phrase">&ldquo;Guide people to want it themselves. Don&rsquo;t make them fear what happens if they don&rsquo;t.&rdquo;</p>
+            <p class="approach-context">Compliance that&rsquo;s demanded gets you the minimum. Compliance that&rsquo;s understood gets you people who keep doing it after you stop watching.</p>
+            <p class="approach-skills">Skills: compliance training design, train-the-trainer, adoption strategy</p>
+          </div>
+
+          <div class="approach-item">
+            <p class="approach-phrase">&ldquo;Practice makes permanent.&rdquo;</p>
+            <p class="approach-context">Repetition doesn&rsquo;t just build skill, it builds habit &mdash; including bad ones. What gets trained in early is what survives once nobody&rsquo;s checking.</p>
+            <p class="approach-skills">Skills: training reinforcement, habit formation, post-launch support</p>
+          </div>
+        </div>
+
+        <div class="approach-group">
+          <h3 class="approach-group-title">Principle</h3>
+
+          <div class="approach-item">
+            <p class="approach-phrase">&ldquo;Failure is inevitable, what matters is what you do after &mdash; Fail forward not backwards.&rdquo;</p>
+            <p class="approach-context">A missed deadline or a stalled request isn&rsquo;t the failure. Letting it stay stalled is.</p>
+            <p class="approach-skills">Skills: vendor management, follow-through tracking, issue escalation</p>
+          </div>
+
+          <div class="approach-item">
+            <p class="approach-phrase">&ldquo;Moderation, in moderation.&rdquo;</p>
+            <dl class="approach-definitions">
+              <div class="approach-definition">
+                <dt>moderation</dt>
+                <dd>(n.) &mdash; restraint; avoidance of excess.</dd>
+              </div>
+              <div class="approach-definition">
+                <dt>moderation</dt>
+                <dd>(n.) &mdash; the act of overseeing, governing, or managing.</dd>
+              </div>
+            </dl>
+            <p class="approach-context">Apply one to the other: be restrained in how you oversee, and don&rsquo;t let restraint itself become a rule you enforce without judgment.</p>
+            <p class="approach-skills">Skills: governance judgment, situational management, compliance oversight</p>
+          </div>
+        </div>
+
+        <div class="expand-back-bottom-wrap">
+          <button type="button" class="expand-back-bottom" data-key="approach">&larr; Back</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="path path--expand" data-key="portfolio">
+      <button type="button" class="expand-trigger" data-key="portfolio" aria-expanded="false" aria-controls="portfolioPanel">
+        <div class="expand-toggle-row">
+          <h2>Portfolio</h2>
+          <span class="expand-back">&larr; Back</span>
+        </div>
+        <p>Reach, road, results.</p>
+      </button>
+
+      <div class="expand-panel" id="portfolioPanel">
+        <div class="portfolio-entry">
+          <h3>Champion National Security</h3>
+          <div class="portfolio-stat">
+            <span class="portfolio-stat-label">Reach</span>
+            <p>~30 regional offices, ~2,000 employees (including staff and security guards), serving roughly 400 clients and servicing thousands of individual client locations nationwide.</p>
+          </div>
+          <div class="portfolio-stat">
+            <span class="portfolio-stat-label">Road</span>
+            <ul class="portfolio-road-list">
+              <li>2017 &mdash; Joined Champion National Security.</li>
+              <li>2019 &mdash; Left the company.</li>
+              <li>2020 &mdash; Champion acquired by Allied Universal.</li>
+            </ul>
+          </div>
+          <div class="portfolio-stat">
+            <span class="portfolio-stat-label">Results</span>
+            <p>I was a key part of the project to modernize outdated scheduling and reporting technology company-wide. During this same period, Champion grew from roughly $20M to $80M in revenue, and was acquired by Allied Universal in 2020.</p>
+          </div>
+        </div>
+
+        <div class="portfolio-entry">
+          <h3>Technology Intern, i.c.stars</h3>
+          <p class="portfolio-pending">Results and specifics from this ongoing engagement will be added as the project reaches completion.</p>
+        </div>
+
+        <a class="portfolio-github" href="https://github.com/wpearson-svg" aria-label="GitHub profile">
+          <svg viewBox="0 0 16 16" width="20" height="20" fill="currentColor" aria-hidden="true">
+            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+          </svg>
+        </a>
+
+        <div class="expand-back-bottom-wrap">
+          <button type="button" class="expand-back-bottom" data-key="portfolio">&larr; Back</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="path path--expand" data-key="contact">
+      <button type="button" class="expand-trigger" data-key="contact" aria-expanded="false" aria-controls="contactPanel">
+        <div class="expand-toggle-row">
+          <h2>Links</h2>
+          <span class="expand-back">&larr; Back</span>
+        </div>
+        <p>Chat, Connect, Collaborate</p>
+      </button>
+
+      <div class="expand-panel" id="contactPanel">
+        <div class="contact-item">
+          <span class="contact-label">Chat</span>
+          <p><a href="mailto:wpearson@icstars.org">wpearson@icstars.org</a></p>
+        </div>
+        <div class="contact-item">
+          <span class="contact-label">Connect</span>
+          <p><a href="https://www.linkedin.com/in/willispearson3rd/">linkedin.com/in/willispearson3rd</a> &mdash; full background and the longer version of the story.</p>
+        </div>
+        <!--
+        Uncomment and fill in when ready:
+        <div class="contact-item">
+          <span class="contact-label">Collaborate</span>
+          <p><a href="tel:+1XXXXXXXXXX">(XXX) XXX-XXXX</a></p>
+        </div>
+        -->
+
+        <div class="expand-back-bottom-wrap">
+          <button type="button" class="expand-back-bottom" data-key="contact">&larr; Back</button>
+        </div>
+      </div>
+    </div>
   </nav>
 </div>
 
-<footer>
-  <a href="https://github.com/wpearson-svg">GitHub</a>
-  <a href="mailto:wpearson@icstars.org">Email</a>
-</footer>
+<script>
+  (function () {
+    var paths = document.getElementById('paths');
+    var triggers = Array.prototype.slice.call(document.querySelectorAll('.expand-trigger'));
+    var busy = false;
+    var openKey = null; // data-key of the currently open tile, or null
+
+    // Durations come from the CSS variables so there is one place to tune them.
+    function ms(name) {
+      return parseFloat(getComputedStyle(document.documentElement).getPropertyValue(name)) || 0;
+    }
+    function wait(t) {
+      return new Promise(function (resolve) { setTimeout(resolve, t); });
+    }
+
+    // Animate the container between two heights. Height can't transition to or
+    // from "auto", so both ends are measured and passed in as pixels.
+    function animateHeight(from, to) {
+      paths.style.height = to + 'px';
+      var anim = paths.animate(
+        [{ height: from + 'px' }, { height: to + 'px' }],
+        { duration: ms('--t-expand'), easing: 'cubic-bezier(0.4, 0, 0.2, 1)' }
+      );
+      return anim.finished.then(function () { paths.style.height = ''; });
+    }
+
+    // Natural (auto) height of the container in its current class state.
+    function naturalHeight() {
+      paths.style.height = 'auto';
+      var h = paths.offsetHeight;
+      paths.style.height = '';
+      return h;
+    }
+
+    function tileFor(key) {
+      return document.querySelector('.path--expand[data-key="' + key + '"]');
+    }
+    function triggerFor(key) {
+      return document.querySelector('.expand-trigger[data-key="' + key + '"]');
+    }
+
+    // Show the bottom "Back" link only when the open tile is actually taller
+    // than the viewport — otherwise the top and bottom links would both be
+    // visible at once on a short panel, which reads as "not much here."
+    function updateBottomBack(tile) {
+      tile.classList.toggle('needs-bottom-back', tile.offsetHeight > window.innerHeight);
+    }
+
+    function open(key) {
+      busy = true;
+      var tile = tileFor(key);
+      var trigger = triggerFor(key);
+      tile.classList.add('path--active');
+      trigger.setAttribute('aria-expanded', 'true');
+      var from = paths.offsetHeight;
+
+      paths.classList.add('is-fading');
+      return wait(ms('--t-fade')).then(function () {
+        paths.classList.add('is-expanded');
+        var to = naturalHeight();
+        return animateHeight(from, to);
+      }).then(function () {
+        openKey = key;
+        updateBottomBack(tile);
+        tile.querySelector('.expand-panel').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        busy = false;
+      });
+    }
+
+    function close() {
+      busy = true;
+      var key = openKey;
+      var tile = tileFor(key);
+      var trigger = triggerFor(key);
+      trigger.setAttribute('aria-expanded', 'false');
+
+      paths.classList.add('is-closing');
+      return wait(ms('--t-panel-out')).then(function () {
+        var from = paths.offsetHeight;
+        paths.classList.remove('is-expanded', 'is-closing');
+        var to = naturalHeight();
+        return animateHeight(from, to);
+      }).then(function () {
+        paths.classList.remove('is-fading');
+        return wait(ms('--t-fade'));
+      }).then(function () {
+        tile.classList.remove('path--active', 'needs-bottom-back');
+        openKey = null;
+        busy = false;
+      });
+    }
+
+    triggers.forEach(function (trigger) {
+      trigger.addEventListener('click', function () {
+        if (busy) return;
+        var key = trigger.getAttribute('data-key');
+        if (openKey === key) {
+          close();
+        } else if (openKey === null) {
+          open(key);
+        } else {
+          // Switching directly from one expanded tile to another:
+          // close the current one, then open the newly requested one.
+          close().then(function () { open(key); });
+        }
+      });
+    });
+
+    Array.prototype.slice.call(document.querySelectorAll('.expand-back-bottom')).forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        if (busy) return;
+        var key = btn.getAttribute('data-key');
+        if (openKey !== key) return;
+        close().then(function () { triggerFor(key).focus(); });
+      });
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && openKey !== null && !busy) {
+        var trigger = triggerFor(openKey);
+        close().then(function () { trigger.focus(); });
+      }
+    });
+
+    window.addEventListener('resize', function () {
+      if (openKey !== null) updateBottomBack(tileFor(openKey));
+    });
+  })();
+</script>
 
 </body>
 </html>
