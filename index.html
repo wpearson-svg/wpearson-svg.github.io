@@ -47,6 +47,14 @@
     text-align: center;
   }
   .mark { width: clamp(10rem, 32vw, 14rem); height: auto; margin: 0 auto 2rem; display: block; }
+  /* Monogram stars: each grows, then returns to size, in the drawing order of
+     W, T, P, III. The script does nothing when reduced motion is requested. */
+  .mono-star {
+    transform-box: fill-box;
+    transform-origin: center;
+    transition: transform 700ms ease-in-out;
+  }
+  .mono-star.on { transform: scale(1.9); }
   h1 {
     font-family: Spectral, Georgia, serif;
     font-weight: 500;
@@ -261,6 +269,13 @@
   .work-entry li { margin-bottom: 0.5rem; }
   .work-entry li:last-child { margin-bottom: 0; }
   .work-entry li strong { color: var(--star); font-weight: 500; }
+  .work-entry li a {
+    color: var(--star);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .work-entry li a:hover { color: var(--brass); }
+  .work-entry li a:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
   /* --- Approach panel content (principles grouped by theme) --- */
   .approach-group { margin-bottom: 2rem; }
   .approach-group:last-child { margin-bottom: 0; }
@@ -416,14 +431,14 @@
       <path d="M453.7,338.0 C454.7,338.3 457.9,339.6 460.0,340.0 C462.1,340.4 464.0,340.1 466.0,340.2 C468.0,340.4 470.0,340.8 472.0,340.9 C474.0,341.0 476.0,340.9 478.0,341.0 C480.0,341.1 482.0,341.5 484.0,341.7 C486.0,341.8 488.0,341.8 490.0,342.0 C492.0,342.2 494.0,342.5 496.0,342.7 C498.0,342.9 500.0,343.0 502.0,343.2 C504.0,343.4 506.0,343.7 508.0,343.9 C510.0,344.1 512.0,344.3 514.0,344.6 C516.0,344.8 518.0,345.1 520.0,345.3 C522.0,345.6 524.0,345.9 526.0,346.2 C528.0,346.5 530.0,346.7 532.0,347.0 C534.0,347.3 536.0,347.5 538.0,347.8 C540.0,348.0 542.0,348.3 544.0,348.6 C546.0,348.8 548.0,349.1 550.0,349.4 C552.0,349.7 554.0,350.0 556.0,350.3 C558.0,350.6 560.0,350.9 562.0,351.2 C564.0,351.5 566.0,351.8 568.0,352.1 C570.0,352.4 572.0,352.8 574.0,353.2 C576.0,353.6 578.0,354.0 580.0,354.4 C582.0,354.9 584.0,355.2 586.0,355.7 C588.0,356.1 590.0,356.6 592.0,357.1 C594.0,357.6 596.0,358.2 598.0,358.8 C600.0,359.3 602.0,359.9 604.0,360.4 C606.0,361.0 608.0,361.5 610.0,362.1 C612.0,362.7 614.0,363.4 616.0,364.2 C618.0,365.0 620.0,365.9 622.0,366.8 C624.0,367.7 626.0,368.7 628.0,369.8 C630.0,370.8 632.2,371.8 634.0,373.0 C635.8,374.2 638.2,376.3 639.0,377.0" />
       </g>
       <g>
-      <path d="M 187.3,323.7 L 190.5,335.5 L 202.3,338.7 L 190.5,341.8 L 187.3,353.7 L 184.2,341.8 L 172.3,338.7 L 184.2,335.5 Z" fill="var(--star)" />
-      <path d="M 320.0,319.7 L 323.2,331.5 L 335.0,334.7 L 323.2,337.8 L 320.0,349.7 L 316.8,337.8 L 305.0,334.7 L 316.8,331.5 Z" fill="var(--star)" />
+      <path class="mono-star" data-k="BL" d="M 187.3,323.7L 190.5,335.5 L 202.3,338.7 L 190.5,341.8 L 187.3,353.7 L 184.2,341.8 L 172.3,338.7 L 184.2,335.5 Z" fill="var(--star)" />
+      <path class="mono-star" data-k="BM" d="M 320.0,319.7L 323.2,331.5 L 335.0,334.7 L 323.2,337.8 L 320.0,349.7 L 316.8,337.8 L 305.0,334.7 L 316.8,331.5 Z" fill="var(--star)" />
       <path d="M 71.0,197.0 L 74.2,208.8 L 86.0,212.0 L 74.2,215.2 L 71.0,227.0 L 67.8,215.2 L 56.0,212.0 L 67.8,208.8 Z" fill="var(--star)" />
-      <path d="M 453.7,25.3 L 456.8,37.2 L 468.7,40.3 L 456.8,43.5 L 453.7,55.3 L 450.5,43.5 L 438.7,40.3 L 450.5,37.2 Z" fill="var(--star)" />
-      <path d="M 320.0,28.3 L 323.2,40.2 L 335.0,43.3 L 323.2,46.5 L 320.0,58.3 L 316.8,46.5 L 305.0,43.3 L 316.8,40.2 Z" fill="var(--star)" />
-      <path d="M 453.7,323.0 L 456.8,334.8 L 468.7,338.0 L 456.8,341.2 L 453.7,353.0 L 450.5,341.2 L 438.7,338.0 L 450.5,334.8 Z" fill="var(--star)" />
-      <path d="M 570.0,151.0 L 573.2,162.8 L 585.0,166.0 L 573.2,169.2 L 570.0,181.0 L 566.8,169.2 L 555.0,166.0 L 566.8,162.8 Z" fill="var(--star)" />
-      <path d="M 188.0,26.0 L 191.2,37.8 L 203.0,41.0 L 191.2,44.2 L 188.0,56.0 L 184.8,44.2 L 173.0,41.0 L 184.8,37.8 Z" fill="var(--star)" />
+      <path class="mono-star" data-k="TR" d="M 453.7,25.3L 456.8,37.2 L 468.7,40.3 L 456.8,43.5 L 453.7,55.3 L 450.5,43.5 L 438.7,40.3 L 450.5,37.2 Z" fill="var(--star)" />
+      <path class="mono-star" data-k="TM" d="M 320.0,28.3L 323.2,40.2 L 335.0,43.3 L 323.2,46.5 L 320.0,58.3 L 316.8,46.5 L 305.0,43.3 L 316.8,40.2 Z" fill="var(--star)" />
+      <path class="mono-star" data-k="BR" d="M 453.7,323.0L 456.8,334.8 L 468.7,338.0 L 456.8,341.2 L 453.7,353.0 L 450.5,341.2 L 438.7,338.0 L 450.5,334.8 Z" fill="var(--star)" />
+      <path class="mono-star" data-k="RC" d="M 570.0,151.0L 573.2,162.8 L 585.0,166.0 L 573.2,169.2 L 570.0,181.0 L 566.8,169.2 L 555.0,166.0 L 566.8,162.8 Z" fill="var(--star)" />
+      <path class="mono-star" data-k="TL" d="M 188.0,26.0L 191.2,37.8 L 203.0,41.0 L 191.2,44.2 L 188.0,56.0 L 184.8,44.2 L 173.0,41.0 L 184.8,37.8 Z" fill="var(--star)" />
       <path d="M 0.0,-15.0 L 3.2,-3.2 L 15.0,0.0 L 3.2,3.2 L 0.0,15.0 L -3.2,3.2 L -15.0,0.0 L -3.2,-3.2 Z" fill="var(--star)" />
       <path d="M 639.0,362.0 L 642.2,373.8 L 654.0,377.0 L 642.2,380.2 L 639.0,392.0 L 635.8,380.2 L 624.0,377.0 L 635.8,373.8 Z" fill="var(--star)" />
       </g>
@@ -449,7 +464,27 @@
       <div class="expand-panel" id="workPanel">
         <div class="work-group">
           <h3 class="work-group-title">Love</h3>
-          <p class="work-group-pending">Coming soon.</p>
+          <div class="work-entry">
+            <h3>WildThing</h3>
+            <p class="meta">Personal project &middot; AI-assisted &middot; Open source (AGPL-3.0)</p>
+            <ul>
+              <li>A local job-search app for desktop and Android. It scores postings against a master resume, shows what each posting asks for that the resume doesn&rsquo;t, and helps prepare tailored resumes, cover letters and interview prep. It also tracks applications, interviews and follow-ups.</li>
+              <li>Works with any AI you choose. Requests and replies pass through a shared folder, and the AI only reads and creates files there, never editing yours. The master resume stays the only source of truth.</li>
+              <li>Designed with its own identity: dark green and gold, a crown logo, and a sidebar layout, built to be a job-search tool that works for the job seeker.</li>
+              <li>Personal information stays out of the repo. The Android app has been run and tested and matches the desktop app.</li>
+              <li><a href="https://github.com/wpearson-svg/job_search_app">Source on GitHub</a></li>
+            </ul>
+          </div>
+          <div class="work-entry">
+            <h3>MireStrider</h3>
+            <p class="meta">Personal project &middot; Designer, product owner and tester &middot; Built with Claude</p>
+            <ul>
+              <li>A custom client for Achaea, a text-based multiplayer game, that turns the game&rsquo;s map into a walkable 3D world with a drop-down terminal for the text.</li>
+              <li>Includes a scripting engine (aliases, triggers, timers, keybinds, live windows) built on plain JSON rules, with an in-game editor and a test field, so a non-programmer can use it.</li>
+              <li>Built with safety in mind: a master off switch, rate-limited commands, and it never acts unattended. The 3D view is for exploring and travel, and play stays in the terminal.</li>
+              <li>In active development. The engine and windows are built and tested, and live play testing is under way. Source is private and available on request.</li>
+            </ul>
+          </div>
         </div>
 
         <div class="work-group">
@@ -470,9 +505,14 @@
             <h3>i.c.stars</h3>
             <p class="meta">Technology Intern &middot; Second Star Collective &middot; Project Lead</p>
             <ul>
-              <li>Building a solution prototype for an international member association.</li>
-              <li>Working as part of a small team, contributing to project decisions and weighing feasibility against what the client's requirements call for.</li>
-              <li>Preparing and prioritizing client-facing questions ahead of live Q&amp;A sessions with the client's team.</li>
+              <li>Led a three-person team responding to an RFP from an international member association: an assistant that helps volunteer chapter leaders find and understand approved information without replacing the human support team.</li>
+              <li>Our proposal won among three competing teams in the first sprint. We then built an AI-assisted working prototype over two more sprints and presented it to the client.</li>
+              <li>Led the plan and coordinated testing and the final presentation. Built the front end, two dashboards (one for the support team, one for system health and settings), and a launcher that starts and monitors the whole system, all AI-assisted.</li>
+              <li>Designed the testing method: real questions sent through the prototype with every step checked, then fixed what testing found.</li>
+              <li>The prototype demonstrated answers drawn only from approved content and shown with their sources, sensitive or uncovered questions handed to a person, checks on every answer before it is shown, rules the client's own team could change without a developer, and multilingual support.</li>
+              <li>This was a prototype test in an isolated environment, with stand-in systems as part of the design. Nothing was delivered to the client as a product.</li>
+              <li>Contributed to project decisions, weighing feasibility against what the client's requirements call for.</li>
+              <li>Prepared and prioritized client-facing questions ahead of live Q&amp;A sessions with the client's team.</li>
             </ul>
           </div>
         </div>
@@ -772,6 +812,54 @@
     window.addEventListener('resize', function () {
       if (openKey !== null) updateBottomBack(tileFor(openKey));
     });
+  })();
+</script>
+
+<script>
+  // Monogram twinkle: W, T, P, III on a loop, starting 2 seconds after load.
+  // Letters: TL/TM/TR = top left/middle/right, BL/BM/BR = bottom,
+  // RC = the star on the right-hand curl.
+  (function () {
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    var STEP = 700;       // next star starts as the previous one starts shrinking
+    var SETTLE = 1200;    // last star shrinks (700ms) plus a 500ms gap
+    var START_DELAY = 2000;
+
+    var letters = [
+      [['TL', 'BL', 'BM', 'TM', 'BM', 'BR', 'TR']],                                  // W
+      [['TM', 'BM', 'TL', 'TM', 'TR']],                                              // T
+      [['TR', 'BR', 'TR', 'RC']],                                                    // P
+      [['TL', 'BL', 'TM', 'BM', 'TR', 'BR'], ['TL', 'TM', 'TR', 'BL', 'BM', 'BR']]   // III
+    ];
+
+    var stars = {};
+    Array.prototype.forEach.call(document.querySelectorAll('.mono-star'), function (el) {
+      stars[el.getAttribute('data-k')] = el;
+    });
+
+    function wait(t) { return new Promise(function (resolve) { setTimeout(resolve, t); }); }
+
+    async function loop() {
+      await wait(START_DELAY);
+      while (true) {
+        for (var l = 0; l < letters.length; l++) {
+          for (var p = 0; p < letters[l].length; p++) {
+            var prev = null;
+            for (var s = 0; s < letters[l][p].length; s++) {
+              var el = stars[letters[l][p][s]];
+              if (prev && prev !== el) prev.classList.remove('on');
+              el.classList.add('on');
+              prev = el;
+              await wait(STEP);
+            }
+            prev.classList.remove('on');
+            await wait(SETTLE);
+          }
+        }
+      }
+    }
+    loop();
   })();
 </script>
 

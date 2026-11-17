@@ -1,0 +1,22 @@
+WILLIS PEARSON
+Technology Intern, i.c.stars Kansas City
+
+QUOTE
+
+"My work is making something new feel natural to the people who have to live with it, whether it's a rollout, a prototype or a story."
+
+PLACARD BIO (about 150 words)
+
+I'm a Kansas City native with years of tech and theater behind me, and I feel at home helping people get comfortable with technology. I lead and organize technology projects, with 2.5 years of project management and IT support experience. As Project Lead of Second Star Collective, a three-person team, I led the build and testing of Isa, an AI assistant prototype that helps volunteer chapter leaders of an international member association find approved answers, with sources, and gets them to a person when it can't answer. On my own time I design and direct projects built with AI: WildThing, an open-source job search app that works with any AI, and MireStrider, a custom client for a text-based multiplayer game with a 3D walkable map. I'm also a creative writer interested in working on games and other media. Ask me about my current work. I want to keep working on projects and leading change and adoption in the tech field.
+
+SHORT VERSION (about 65 words)
+
+Kansas City native with years of tech and theater behind me. Project Lead and Technology Intern. I led the build and testing of Isa, an AI assistant prototype for an international member association. On my own time I design and direct WildThing (a job search app) and MireStrider (a game client with a 3D map), and I'm a creative writer interested in games and other media. I want to keep leading projects, change and adoption in tech.
+
+WHAT TO SAY WHEN SOMEONE STOPS (25 seconds)
+
+"I'm Willis, a Kansas City native with years of tech and theater behind me, so I like helping people get comfortable with new tools. On my team's project I'm the project lead: I built the front end, connected the pieces and designed how we test it. I also have two projects of my own: a job search app and a custom client for a text-based game with a 3D walkable map. I'm also a creative writer interested in working on games and other media, so ask me about my current work. What I want next is to keep working on projects and to lead change and adoption in tech."
+
+IF SOMEONE ASKS ABOUT YOUR CURRENT WORK
+
+Offer the Theseus UNdone one-sheet.

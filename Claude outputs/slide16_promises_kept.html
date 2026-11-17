@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Promises kept: animated slide</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Roboto+Slab:wght@300;400;700&display=swap">
+<style>
+/* ============================================================
+   "What we promised in September", animated.
+   Same stage, colors and type as the /present deck (BRAND_GUIDELINES.md):
+   Dark Blue #1d2d5c, Medium Blue #07649d, Blue #00a4e4, Green #6cb33f,
+   Light Blue #e7f0f5; 30% tints for the box fills. Sizes in cqw.
+   Morph: automatic; press R or click to replay.
+   ============================================================ */
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: #f6f7f8; }
+.present { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+  font-family: Roboto, Arial, sans-serif; color: #1d2d5c; }
+.present__stage { position: relative; width: min(100vw, 177.78vh); height: min(100vh, 56.25vw);
+  background: #fff; overflow: hidden; container-type: size; }
+.present__c { position: absolute; top: -9cqw; right: -9.5cqw; width: 26cqw; height: 26cqw; opacity: 1; }
+.present__body { position: absolute; inset: 0; padding: 2.7cqw 3.75cqw 0; }
+.present__eyebrow { margin: 0 0 0.5cqw; font-weight: 700; font-size: 1.2cqw; letter-spacing: 0.12em; color: #07649d; text-transform: uppercase; }
+.present__title { margin: 0 0 0.5cqw; font-family: "Roboto Slab", Georgia, serif; font-weight: 300; font-size: 3.3cqw; line-height: 1.12; color: #1d2d5c; }
+.present__lead { margin: 0; font-weight: 300; font-size: 1.45cqw; line-height: 1.4; color: #323e48; }
+.flow { position: absolute; left: 0; right: 0; top: 11.2cqw; width: 100cqw; height: auto; display: block; cursor: pointer; }
+.flow text { font-family: Roboto, Arial, sans-serif; }
+.present__band { position: absolute; left: 3.75cqw; right: 3.75cqw; bottom: 1.5cqw; height: 3.4cqw; display: flex; align-items: center; justify-content: center;
+  background: #e7f0f5; font-weight: 300; font-size: 1.3cqw; color: #1d2d5c; white-space: pre; }
+.present__band b { font-weight: 700; letter-spacing: 0.04em; }
+
+/* boxes rise in one after another, as the deck's own diagram does */
+.node { animation: none; animation-name: rise 0.4s ease-out both; animation-delay: calc(var(--n, 0) * 110ms + 150ms); transform-box: fill-box; }
+@keyframes rise { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+/* the glow on whichever part the dot is in */
+.halo { fill: none; stroke: #00a4e4; stroke-width: 4; opacity: 0; transition: opacity 0.25s; }
+.halo-c { fill: #00a4e4; opacity: 0; transition: opacity 0.25s; }
+.node.on .halo { opacity: 0.85; }
+.node.on .halo-c { opacity: 0.16; }
+
+#dot-ring { transform-box: fill-box; transform-origin: center; animation: ring 1.4s ease-in-out infinite; }
+@keyframes ring { 0%, 100% { transform: scale(0.9); opacity: .3; } 50% { transform: scale(1.35); opacity: .12; } }
+#cap { transition: opacity 0.35s; }
+#pips circle { fill: #d9dee3; transition: fill 0.3s; }
+#pips circle.on { fill: #07649d; }
+
+@media (prefers-reduced-motion: reduce) {
+  .node { animation: none; }
+  #dot-ring { animation: none; }
+}
+
+/* slide 16 is a Dark Blue slide */
+.present__stage { background: #1d2d5c; }
+.present__title { color: #fff; }
+.present__lead { color: #e7f0f5; }
+.present__eyebrow { color: #7fd0f5; }
+</style>
+</head>
+<body>
+<div class="present">
+ <div class="present__stage">
+  <svg class="present__c" viewBox="0 0 200 200" aria-hidden="true"><path d="M153.26 74.88L193.32 74.88A3.33 3.33 0 0 0 196.5 70.58A100.89 100.89 0 1 0 196.5 129.42A3.33 3.33 0 0 0 193.32 125.12L153.26 125.12A3.33 3.33 0 0 0 150.32 126.88A57.05 57.05 0 1 1 150.32 73.12A3.33 3.33 0 0 0 153.26 74.88Z" fill="#27396f"/></svg>
+  <div class="present__body">
+   <p class="present__eyebrow" id="eyebrow">What we promised</p>
+   <h1 class="present__title">What we promised, what we built</h1>
+   <p class="present__lead" id="lead">The diagram you saw at the start.</p>
+  </div>
+  <svg id="flow" class="flow" viewBox="0 140 1280 480" role="img" aria-label="September's diagram: a chapter leader's question passes access control, translation and input compliance, then database search, output compliance and ticketing, with AI as the fallback and a contact path to the ISACA team">
+<defs>
+<marker id="a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#1d2d5c"/></marker>
+<filter id="ds" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="0" dy="1.5" stdDeviation="2" flood-color="#1d2d5c" flood-opacity=".35"/></filter>
+</defs>
+<rect id="panel" x="6" y="138" width="1268" height="480" rx="14" fill="#f6f7f8"/>
+<marker id="aw" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#fff"/></marker><g id="sleek-back" opacity="0"><path id="rail" d="M48 236H1190" fill="none" stroke="#fff" stroke-width="2.5" marker-end="url(#aw)" stroke-dasharray="1200" stroke-dashoffset="1200"/><path id="br-trans" d="M56 236V380" fill="none" stroke="#fff" stroke-width="2" stroke-dasharray="144" stroke-dashoffset="144"/><path id="br-ai" d="M524 236V380" fill="none" stroke="#fff" stroke-width="2" stroke-dasharray="144" stroke-dashoffset="144"/></g>
+<path d="M244 300H272" fill="none" stroke="#1d2d5c" stroke-width="2" marker-start="url(#a)"/>
+<path d="M272 238V362" fill="none" stroke="#1d2d5c" stroke-width="2"/>
+<path d="M272 238H300" fill="none" stroke="#1d2d5c" stroke-width="2" marker-end="url(#a)"/>
+<path d="M272 362H300" fill="none" stroke="#1d2d5c" stroke-width="2" marker-end="url(#a)"/>
+<path d="M454 238V362" fill="none" stroke="#1d2d5c" stroke-width="2"/>
+<path d="M426 238H454" fill="none" stroke="#1d2d5c" stroke-width="2"/>
+<path d="M426 362H454" fill="none" stroke="#1d2d5c" stroke-width="2"/>
+<path d="M454 300H482" fill="none" stroke="#1d2d5c" stroke-width="2" marker-end="url(#a)"/>
+<path d="M118 300H82" fill="none" stroke="#1d2d5c" stroke-width="2" marker-end="url(#a)" marker-start="url(#a)"/>
+<path d="M608 300H646" fill="none" stroke="#1d2d5c" stroke-width="2" marker-end="url(#a)"/>
+<path d="M772 300H810" fill="none" stroke="#1d2d5c" stroke-width="2" marker-end="url(#a)"/>
+<path d="M936 300H974" fill="none" stroke="#1d2d5c" stroke-width="2" marker-end="url(#a)"/>
+<path d="M1100 300H1136" fill="none" stroke="#1d2d5c" stroke-width="2" marker-end="url(#a)"/>
+<path d="M545 268V196H363V210" fill="none" stroke="#1d2d5c" stroke-width="2" marker-end="url(#a)"/>
+<path d="M873 268V196H545" fill="none" stroke="#1d2d5c" stroke-width="2"/>
+<path d="M363 196H210V268" fill="none" stroke="#1d2d5c" stroke-width="2" marker-end="url(#a)"/>
+<path d="M576.5 268V248H1005.5V268" fill="none" stroke="#1d2d5c" stroke-width="2" marker-end="url(#a)"/>
+<path d="M148 268V172H1049.6V268" fill="none" stroke="#1d2d5c" stroke-width="2" stroke-dasharray="9 6" marker-end="url(#a)"/>
+<path d="M873 332V424" fill="none" stroke="#1d2d5c" stroke-width="2" marker-end="url(#a)" marker-start="url(#a)"/>
+<path d="M873 488V520" fill="none" stroke="#1d2d5c" stroke-width="2" marker-end="url(#a)" marker-start="url(#a)"/>
+<path d="M709 332V500" fill="none" stroke="#1d2d5c" stroke-width="2" marker-end="url(#a)" marker-start="url(#a)"/>
+<path d="M810 552H772" fill="none" stroke="#1d2d5c" stroke-width="2" marker-end="url(#a)" marker-start="url(#a)"/>
+<rect x="790" y="410" width="166" height="190" rx="8" fill="none" stroke="#1d2d5c" stroke-width="2" stroke-dasharray="9 6"/>
+<g class="node" id="n-cyl"><rect class="halo" x="636" y="498" width="146" height="116" rx="14"/>
+<path d="M646 512V594A63 12 0 0 0 772 594V512A63 12 0 0 0 646 512Z" fill="#d3e8c5" stroke="#1d2d5c" stroke-width="2"/>
+<path d="M646 512A63 12 0 0 0 772 512" fill="none" stroke="#1d2d5c" stroke-width="2"/>
+<text x="709" y="549" text-anchor="middle" font-size="16" font-weight="700" fill="#1d2d5c">ISACA's</text>
+<text x="709" y="567" text-anchor="middle" font-size="16" font-weight="700" fill="#1d2d5c">approved</text>
+<text x="709" y="585" text-anchor="middle" font-size="16" font-weight="700" fill="#1d2d5c">content</text></g>
+<g class="node" id="n-front"><rect class="halo" x="113" y="263" width="136" height="74" rx="10"/><rect x="118" y="268" width="126" height="64" rx="6" fill="#1d2d5c" stroke="#1d2d5c" stroke-width="2"/><text x="181.0" y="306.0" text-anchor="middle" font-size="19" font-weight="700" fill="#fff">Front end</text><circle cx="118" cy="268" r="14" fill="#1d2d5c" stroke="#fff" stroke-width="2"/><text x="118" y="273.5" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">8</text></g>
+<g class="node" id="n-trans"><rect class="halo" x="295" y="205" width="136" height="66" rx="10"/><rect x="300" y="210" width="126" height="56" rx="6" fill="#b3e4f8" stroke="#1d2d5c" stroke-width="2"/><text x="363.0" y="244.0" text-anchor="middle" font-size="19" font-weight="700" fill="#1d2d5c">Translation</text><circle cx="300" cy="210" r="14" fill="#1d2d5c" stroke="#fff" stroke-width="2"/><text x="300" y="215.5" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">2</text></g>
+<g class="node" id="n-access"><rect class="halo" x="295" y="329" width="136" height="66" rx="10"/><rect x="300" y="334" width="126" height="56" rx="6" fill="#b3e4f8" stroke="#1d2d5c" stroke-width="2"/><text x="363.0" y="357.0" text-anchor="middle" font-size="19" font-weight="700" fill="#1d2d5c">Access</text><text x="363.0" y="379.0" text-anchor="middle" font-size="19" font-weight="700" fill="#1d2d5c">control</text><circle cx="300" cy="334" r="14" fill="#1d2d5c" stroke="#fff" stroke-width="2"/><text x="300" y="339.5" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">1</text></g>
+<g class="node" id="n-input"><rect class="halo" x="477" y="263" width="136" height="74" rx="10"/><rect x="482" y="268" width="126" height="64" rx="6" fill="#1d2d5c" stroke="#1d2d5c" stroke-width="2"/><text x="545.0" y="295.0" text-anchor="middle" font-size="19" font-weight="700" fill="#fff">Input</text><text x="545.0" y="317.0" text-anchor="middle" font-size="19" font-weight="700" fill="#fff">compliance</text><circle cx="482" cy="268" r="14" fill="#1d2d5c" stroke="#fff" stroke-width="2"/><text x="482" y="273.5" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">3</text></g>
+<g class="node" id="n-search"><rect class="halo" x="641" y="263" width="136" height="74" rx="10"/><rect x="646" y="268" width="126" height="64" rx="6" fill="#d3e8c5" stroke="#1d2d5c" stroke-width="2"/><text x="709.0" y="295.0" text-anchor="middle" font-size="19" font-weight="700" fill="#1d2d5c">Database</text><text x="709.0" y="317.0" text-anchor="middle" font-size="19" font-weight="700" fill="#1d2d5c">search</text><circle cx="646" cy="268" r="14" fill="#1d2d5c" stroke="#fff" stroke-width="2"/><text x="646" y="273.5" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">6</text></g>
+<g class="node" id="n-out"><rect class="halo" x="805" y="263" width="136" height="74" rx="10"/><rect x="810" y="268" width="126" height="64" rx="6" fill="#1d2d5c" stroke="#1d2d5c" stroke-width="2"/><text x="873.0" y="295.0" text-anchor="middle" font-size="19" font-weight="700" fill="#fff">Output</text><text x="873.0" y="317.0" text-anchor="middle" font-size="19" font-weight="700" fill="#fff">compliance</text><circle cx="810" cy="268" r="14" fill="#1d2d5c" stroke="#fff" stroke-width="2"/><text x="810" y="273.5" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">4</text></g>
+<g class="node" id="n-ticket"><rect class="halo" x="969" y="263" width="136" height="74" rx="10"/><rect x="974" y="268" width="126" height="64" rx="6" fill="#d3e8c5" stroke="#1d2d5c" stroke-width="2"/><text x="1037.0" y="306.0" text-anchor="middle" font-size="19" font-weight="700" fill="#1d2d5c">Ticketing</text><circle cx="974" cy="268" r="14" fill="#1d2d5c" stroke="#fff" stroke-width="2"/><text x="974" y="273.5" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">5</text></g>
+<g class="node" id="n-ai"><rect class="halo" x="805" y="419" width="136" height="74" rx="10"/><rect x="810" y="424" width="126" height="64" rx="6" fill="#b3e4f8" stroke="#1d2d5c" stroke-width="2"/><text x="873.0" y="462.0" text-anchor="middle" font-size="19" font-weight="700" fill="#1d2d5c">Complex AI</text></g>
+<g class="node" id="n-rag"><rect class="halo" x="805" y="515" width="136" height="74" rx="10"/><rect x="810" y="520" width="126" height="64" rx="6" fill="#b3e4f8" stroke="#1d2d5c" stroke-width="2"/><text x="873.0" y="558.0" text-anchor="middle" font-size="19" font-weight="700" fill="#1d2d5c">RAG</text></g>
+<circle cx="790" cy="410" r="14" fill="#1d2d5c" stroke="#fff" stroke-width="2"/><text x="790" y="415.5" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">7</text>
+<g class="node" id="n-leader"><circle class="halo-c" cx="48" cy="300" r="40"/><text x="48" y="296" text-anchor="middle" font-size="18" font-weight="500" fill="#1d2d5c">Chapter</text><text x="48" y="316" text-anchor="middle" font-size="18" font-weight="500" fill="#1d2d5c">leader</text></g>
+<g class="node" id="n-team"><circle class="halo-c" cx="1198" cy="300" r="40"/><text x="1198" y="296" text-anchor="middle" font-size="18" font-weight="500" fill="#1d2d5c">ISACA</text><text x="1198" y="316" text-anchor="middle" font-size="18" font-weight="500" fill="#1d2d5c">team</text></g>
+<text text-anchor="middle" x="181" y="355" font-size="16" font-weight="300" fill="#1d2d5c">Always on screen, one</text>
+<text text-anchor="middle" x="181" y="375" font-size="16" font-weight="300" fill="#1d2d5c">click from any answer</text>
+<text text-anchor="middle" x="363" y="413" font-size="16" font-weight="300" fill="#1d2d5c">Sign in: your ISACA</text>
+<text text-anchor="middle" x="363" y="433" font-size="16" font-weight="300" fill="#1d2d5c">account, by role</text>
+<text text-anchor="middle" x="545" y="355" font-size="16" font-weight="300" fill="#1d2d5c">Check 1:</text>
+<text text-anchor="middle" x="545" y="375" font-size="16" font-weight="300" fill="#1d2d5c">reads the question</text>
+<text text-anchor="middle" x="1043" y="355" font-size="16" font-weight="300" fill="#1d2d5c">Your team</text>
+<text text-anchor="middle" x="1043" y="375" font-size="16" font-weight="300" fill="#1d2d5c">gets a ticket</text>
+<text x="719" y="355" font-size="16" font-weight="300" fill="#1d2d5c">Search first,</text><text x="719" y="375" font-size="16" font-weight="300" fill="#1d2d5c">ISACA's words</text>
+<text x="883" y="355" font-size="16" font-weight="300" fill="#1d2d5c">Check 2:</text><text x="883" y="375" font-size="16" font-weight="300" fill="#1d2d5c">reads answers</text>
+<text x="972" y="490" font-size="16" font-weight="300" fill="#1d2d5c">AI, if search isn't enough:</text>
+<text x="972" y="510" font-size="16" font-weight="300" fill="#1d2d5c">role filter · RAG ·</text>
+<text x="972" y="530" font-size="16" font-weight="300" fill="#1d2d5c">knowledge graph · logs</text>
+<text x="560" y="162" font-size="17" font-weight="300" font-style="italic" fill="#1d2d5c">Talk to a person: always on screen, the question and history go with it</text>
+<g transform="translate(48,500)" font-size="16" font-weight="300" fill="#1d2d5c"><rect y="0" width="18" height="18" rx="3" fill="#1d2d5c" stroke="#1d2d5c" stroke-width="2"/><text x="28" y="14">Our software</text><rect y="28" width="18" height="18" rx="3" fill="#b3e4f8" stroke="#1d2d5c" stroke-width="2"/><text x="28" y="42">Interchangeable part</text><rect y="56" width="18" height="18" rx="3" fill="#d3e8c5" stroke="#1d2d5c" stroke-width="2"/><text x="28" y="70">ISACA's content and systems</text></g>
+<g id="sleek-front"></g>
+  </svg>
+ </div>
+</div>
+<script>
+(function () {
+  var NS = "http://www.w3.org/2000/svg", NAVY = "#1d2d5c", MED = "#07649d";
+  var svg = document.getElementById("flow"), front = document.getElementById("sleek-front");
+  var reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var token = 0;
+  var PILL = { built: ["✓ Built", "#d3e8c5"], partial: ["◐ Partly", "#fee7c2"], reword: ["✎ Reworded", "#b3e4f8"] };
+  // target shape for each part (x, y, w, h, rx), plus what the closing slide says (presentation/slides.json)
+  var M = {
+    access: { t: [154, 214, 44, 44, 22], cx: 176, main: 1, title: "Sign in", st: "built", text: "Sign-in and roles (test accounts, not ISACA's)" },
+    input:  { t: [386, 214, 44, 44, 22], cx: 408, main: 1, title: "Check 1", st: "built", text: "Rules files your team owns and approves" },
+    search: { t: [618, 214, 44, 44, 22], cx: 640, main: 1, title: "1 · Search", st: "built", text: "Direct answers in ISACA's own words, then search by meaning" },
+    out:    { t: [850, 214, 44, 44, 22], cx: 872, main: 1, title: "Check 2", st: "built", text: "Every AI sentence checked; then ISACA's words; then a person" },
+    ticket: { t: [1082, 214, 44, 44, 22], cx: 1104, main: 1, title: "Your team", st: "built", text: "A reference number and a Salesforce case" },
+    trans:  { t: [38, 382, 36, 36, 18], cx: 56, side: 1, title: "Translation", st: "reword", text: "One model for about 200 languages; two connected today", w: 380 },
+    ai:     { t: [506, 382, 36, 36, 18], cx: 524, side: 1, title: "2 · AI, if search isn't enough", st: "partial", text: "RAG and logs built. Knowledge graph: a placeholder. Rules can already target a role; the content filter is designed, and isn't needed until ISACA adds restricted content", w: 540 },
+    front:  { t: [90, 548, 1100, 44, 22], bar: 1, title: "Talk to a person", st: "built", text: "“Talk to a person” on every screen, and one click from any answer, showing what will be sent" }
+  };
+  var GONE = ["rag", "cyl", "leader", "team"];
+  var orig = {};
+
+  function mainRect(id) { return document.querySelector("#n-" + id + " > rect:not(.halo)"); }
+  function el(name, attrs, txt) { var e = document.createElementNS(NS, name); for (var k in attrs) e.setAttribute(k, attrs[k]); if (txt != null) e.textContent = txt; return e; }
+  function wrap(text, fs, width) {
+    var max = Math.floor(width / (fs * 0.5)), words = text.split(" "), lines = [], cur = "";
+    words.forEach(function (w) { if ((cur + " " + w).trim().length > max) { lines.push(cur); cur = w; } else cur = (cur + " " + w).trim(); });
+    if (cur) lines.push(cur); return lines;
+  }
+  function pill(x, y, st, anchor) {
+    var p = PILL[st], w = p[0].length * 8 + 22, x0 = anchor === "middle" ? x - w / 2 : x;
+    var g = el("g", {});
+    g.appendChild(el("rect", { x: x0, y: y, width: w, height: 24, rx: 12, fill: p[1] }));
+    g.appendChild(el("text", { x: x0 + w / 2, y: y + 17, "text-anchor": "middle", "font-size": 14, "font-weight": 700, fill: NAVY }, p[0]));
+    return g;
+  }
+  function build() {
+    front.innerHTML = "";
+    var i = 0;
+    Object.keys(M).forEach(function (id) {
+      var m = M[id], g = el("g", { class: "sl", opacity: 0, "data-i": i++ });
+      if (m.main) {
+        g.appendChild(el("text", { x: m.cx, y: 178, "text-anchor": "middle", "font-size": 21, "font-weight": 700, fill: "#fff" }, m.title));
+        g.appendChild(pill(m.cx, 272, m.st, "middle"));
+        wrap(m.text, 16, 215).forEach(function (l, k) { g.appendChild(el("text", { x: m.cx, y: 322 + k * 21, "text-anchor": "middle", "font-size": 16, "font-weight": 300, fill: "#e7f0f5" }, l)); });
+      } else if (m.side) {
+        var x = m.cx + 32;
+        g.appendChild(el("text", { x: x, y: 398, "font-size": 19, "font-weight": 700, fill: "#fff" }, m.title));
+        g.appendChild(pill(x, 408, m.st, "start"));
+        wrap(m.text, 16, m.w).forEach(function (l, k) { g.appendChild(el("text", { x: x, y: 454 + k * 21, "font-size": 16, "font-weight": 300, fill: "#e7f0f5" }, l)); });
+      } else {
+        g.appendChild(el("text", { x: 124, y: 576, "font-size": 18, "font-weight": 700, fill: "#fff" }, m.title));
+        g.appendChild(el("text", { x: 310, y: 576, "font-size": 15.5, "font-weight": 300, fill: "#e7f0f5" }, m.text));
+        var p = pill(1058, 558, m.st, "start"); g.appendChild(p);
+      }
+      front.appendChild(g);
+      if (!m.bar) { // glyph inside the small circle
+        var r = m.t[4], gl = el("text", { class: "glyph", x: m.t[0] + r, y: m.t[1] + r + 6, "text-anchor": "middle", "font-size": m.main ? 19 : 16, "font-weight": 700, opacity: 0,
+          fill: id === "input" || id === "out" ? "#fff" : NAVY }, PILL[m.st][0].charAt(0));
+        front.appendChild(gl);
+      }
+    });
+  }
+  function ease(f) { return f < 0.5 ? 4 * f * f * f : 1 - Math.pow(-2 * f + 2, 3) / 2; }
+  function wait(ms, my) { return new Promise(function (r) { setTimeout(function () { r(my === token); }, ms); }); }
+  function fadeOthers(op) {
+    Array.prototype.forEach.call(svg.children, function (c) {
+      if (c.tagName === "defs" || c.id === "sleek-back" || c.id === "sleek-front") return;
+      if (c.classList && c.classList.contains("node") && M[c.id.slice(2)]) return;
+      c.style.transition = "opacity .5s"; c.style.opacity = op;
+    });
+    GONE.forEach(function (id) { var n = document.getElementById("n-" + id); n.style.transition = "opacity .5s"; n.style.opacity = op; });
+  }
+  function tween(my) {
+    return new Promise(function (res) {
+      var ids = Object.keys(M), t0 = null, D = 1000;
+      ids.forEach(function (id) { var r = mainRect(id); orig[id] = orig[id] || ["x", "y", "width", "height", "rx"].map(function (a) { return parseFloat(r.getAttribute(a) || 0); });
+        r.style.transition = "stroke .6s, fill .6s"; r.style.stroke = "#fff"; if (M[id].bar) r.style.fill = "#07649d";
+        var n = document.getElementById("n-" + id); Array.prototype.forEach.call(n.children, function (c) { if (c !== r) { c.style.transition = "opacity .3s"; c.style.opacity = 0; } }); });
+      function tick(t) {
+        if (my !== token) return res(false);
+        if (t0 === null) t0 = t;
+        var f = ease(Math.min(1, (t - t0) / D));
+        ids.forEach(function (id) { var r = mainRect(id), a = orig[id], b = M[id].t;
+          ["x", "y", "width", "height", "rx"].forEach(function (k, j) { r.setAttribute(k, a[j] + (b[j] - a[j]) * f); }); });
+        if (f < 1) requestAnimationFrame(tick); else res(true);
+      }
+      requestAnimationFrame(tick);
+    });
+  }
+  function draw(id, len, ms) { var p = document.getElementById(id); p.style.transition = "stroke-dashoffset " + ms + "ms ease-out"; p.style.strokeDashoffset = 0; }
+  function swapText(a, b) { var l = document.getElementById("lead"); l.style.transition = "opacity .3s"; l.style.opacity = 0; setTimeout(function () { l.textContent = b; l.style.opacity = 1; }, 320); }
+
+  function reset() {
+    token++;
+    Object.keys(M).forEach(function (id) { var r = mainRect(id), a = orig[id]; r.style.transition = "none"; r.style.stroke = ""; r.style.fill = "";
+      if (a) ["x", "y", "width", "height", "rx"].forEach(function (k, j) { r.setAttribute(k, a[j]); });
+      var n = document.getElementById("n-" + id); Array.prototype.forEach.call(n.children, function (c) { c.style.transition = "none"; c.style.opacity = ""; }); });
+    Array.prototype.forEach.call(svg.children, function (c) { if (c.id !== "sleek-back" && c.id !== "sleek-front" && c.tagName !== "defs") { c.style.transition = "none"; c.style.opacity = ""; } });
+    GONE.forEach(function (id) { var n = document.getElementById("n-" + id); n.style.transition = "none"; n.style.opacity = ""; });
+    ["rail", "br-trans", "br-ai"].forEach(function (id) { var p = document.getElementById(id); p.style.transition = "none"; p.style.strokeDashoffset = p.getAttribute("stroke-dasharray"); });
+    document.getElementById("sleek-back").setAttribute("opacity", 0); front.innerHTML = ""; document.getElementById("lead").textContent = "The diagram you saw at the start.";
+    document.getElementById("eyebrow").textContent = "What we promised";
+  }
+  async function play() {
+    reset(); var my = token; build();
+    if (!(await wait(reduce ? 0 : 2200, my))) return;
+    document.getElementById("eyebrow").textContent = "Promises kept";
+    swapText("", "The same diagram, with an honest status on every part.");
+    fadeOthers(0);
+    if (!(await tween(my))) return;
+    document.getElementById("sleek-back").setAttribute("opacity", 1); draw("rail", 1200, 700); draw("br-trans", 144, 500); draw("br-ai", 144, 500);
+    var items = front.querySelectorAll(".sl, .glyph");
+    Array.prototype.forEach.call(items, function (g, k) {
+      setTimeout(function () { if (my !== token) return; g.style.transition = "opacity .5s"; g.style.opacity = 1; }, 150 + (g.dataset.i || (k % 8)) * 110);
+    });
+  }
+  svg.addEventListener("click", play);
+  document.addEventListener("keydown", function (e) { if (e.key === "r" || e.key === "R") play(); });
+  window.IsaMorph = { play: play, reset: reset };
+  play();
+})();
+</script>
+</body>
+</html>
