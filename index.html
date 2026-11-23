@@ -411,6 +411,196 @@
     text-underline-offset: 3px;
   }
   .contact-item a:hover { color: var(--brass); }
+
+  /* --- Project sections below the tiles ---
+     Each project is a "section.project". The colours are custom properties on
+     .project, so another project can take its own theme by overriding them.
+     WildThing uses its own forest green and gold. */
+  .project {
+    --p-bg: #12291F;
+    --p-card: #1B3A2D;
+    --p-line: #2C4D3D;
+    --p-text: #EDE7D3;
+    --p-muted: #A9BDB1;
+    --p-accent: #D4A017;
+    --p-link: #E8C766;
+    --p-btn: #B8860B;
+    --p-btn-text: #12291F;
+    background: var(--p-bg);
+    color: var(--p-text);
+    border-top: 3px solid var(--p-btn);
+    padding: clamp(2.5rem, 8vw, 4.5rem) clamp(1.25rem, 5vw, 2rem);
+    scroll-margin-top: 1rem;
+  }
+  .project-inner { max-width: 52rem; margin: 0 auto; }
+  .project h2 {
+    font-family: Spectral, Georgia, serif;
+    font-weight: 500;
+    font-size: clamp(1.8rem, 5vw, 2.4rem);
+    line-height: 1.15;
+    color: var(--p-accent);
+    margin: 0 0 0.9rem;
+  }
+  .project-lede {
+    font-family: Spectral, Georgia, serif;
+    font-size: 1.15rem;
+    line-height: 1.7;
+    margin: 0 0 1.5rem;
+  }
+  .project-facts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+    gap: 1px;
+    background: var(--p-line);
+    border: 1px solid var(--p-line);
+    border-radius: 12px;
+    overflow: hidden;
+    margin: 0 0 1.25rem;
+  }
+  .project-facts div { background: var(--p-card); padding: 0.9rem 1rem; }
+  .project-facts dt {
+    color: var(--p-accent);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 0 0 0.2rem;
+  }
+  .project-facts dd { margin: 0; color: var(--p-text); font-size: 0.95rem; line-height: 1.5; }
+  .project-link {
+    display: inline-block;
+    background: var(--p-btn);
+    color: var(--p-btn-text);
+    padding: 0.55rem 1.1rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .project-link:hover { background: var(--p-accent); }
+  .project a:focus-visible { outline: 2px solid var(--p-accent); outline-offset: 3px; }
+  .project-note { font-size: 0.85rem; color: var(--p-muted); margin: 1rem 0 0; }
+  .project figure { margin: 1rem 0 0; }
+  .project figure img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--p-line);
+    border-radius: 10px;
+    background: var(--p-card);
+  }
+  .project figure.project-figure--narrow img { max-width: 34rem; margin: 0 auto; }
+  .project-group { margin-top: 3rem; }
+  .project h3 {
+    font-family: Spectral, Georgia, serif;
+    font-weight: 500;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--p-accent);
+    margin: 0 0 1.25rem;
+  }
+  .project-item { margin-bottom: 2.25rem; }
+  .project-item:last-child { margin-bottom: 0; }
+  .project h4 {
+    font-family: Spectral, Georgia, serif;
+    font-weight: 500;
+    font-size: 1.15rem;
+    color: var(--p-text);
+    margin: 0 0 0.35rem;
+  }
+  .project-item p { margin: 0; color: var(--p-muted); font-size: 0.98rem; line-height: 1.7; }
+  .project-text { margin: 0; color: var(--p-muted); font-size: 0.98rem; line-height: 1.7; }
+  .project-list { margin: 0; padding-left: 1.1rem; color: var(--p-muted); font-size: 0.98rem; line-height: 1.7; }
+  .project-list li { margin-bottom: 0.65rem; }
+  .project-list li:last-child { margin-bottom: 0; }
+  .project-list strong { color: var(--p-accent); font-weight: 500; }
+  .project-top { margin: 3rem 0 0; }
+  .project-top a { color: var(--p-link); text-underline-offset: 3px; }
+
+  /* Isa takes the page's own night and brass colours. */
+  .project--isa {
+    --p-bg: #121A2C;
+    --p-card: #1B2640;
+    --p-line: #2A3654;
+    --p-text: var(--star);
+    --p-muted: #A7B0C2;
+    --p-accent: var(--brass);
+    --p-link: #E2C48E;
+    --p-btn: var(--brass);
+    --p-btn-text: var(--night);
+  }
+
+  /* --- Screenshot gallery ---
+     A row of slides that scrolls sideways with snap points, so touch swipes
+     work natively. Buttons and the arrow keys move one slide at a time. */
+  .gallery { margin-top: 1.25rem; }
+  .gallery-track {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    overscroll-behavior-x: contain;
+    margin: 0;
+    padding: 0 0 0.75rem;
+    list-style: none;
+    scrollbar-width: thin;
+    scrollbar-color: var(--p-line) transparent;
+  }
+  @media (prefers-reduced-motion: reduce) { .gallery-track { scroll-behavior: auto; } }
+  .gallery-track:focus-visible { outline: 2px solid var(--p-accent); outline-offset: 4px; border-radius: 10px; }
+  .gallery-slide { flex: 0 0 100%; scroll-snap-align: center; }
+  .project .gallery-slide figure { margin: 0; }
+  .gallery-frame {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: clamp(18rem, 62vh, 34rem);
+    background: var(--p-card);
+    border: 1px solid var(--p-line);
+    border-radius: 10px;
+    padding: 0.75rem;
+  }
+  .gallery-frame:focus-visible { outline: 2px solid var(--p-accent); outline-offset: 3px; }
+  .gallery-frame picture {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+  }
+  .project .gallery-frame img {
+    object-fit: contain;
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    max-height: 100%;
+    border-radius: 6px;
+  }
+  .gallery-slide figcaption { margin: 0.65rem 0 0; color: var(--p-muted); font-size: 0.95rem; line-height: 1.6; }
+  .gallery-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 0.5rem;
+  }
+  .gallery-btn {
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 50%;
+    border: 1px solid var(--p-line);
+    background: var(--p-card);
+    color: var(--p-text);
+    font: inherit;
+    font-size: 1.2rem;
+    line-height: 1;
+    cursor: pointer;
+  }
+  .gallery-btn:hover:not(:disabled) { border-color: var(--p-accent); color: var(--p-accent); }
+  .gallery-btn:focus-visible { outline: 2px solid var(--p-accent); outline-offset: 2px; }
+  .gallery-btn:disabled { opacity: 0.4; cursor: default; }
+  .gallery-count { color: var(--p-muted); font-size: 0.9rem; min-width: 4.5rem; text-align: center; }
 </style>
 </head>
 <body>
@@ -472,7 +662,7 @@
               <li>Works with any AI you choose. Requests and replies pass through a shared folder, and the AI only reads and creates files there, never editing yours. The master resume stays the only source of truth.</li>
               <li>Designed with its own identity: dark green and gold, a crown logo, and a sidebar layout, built to be a job-search tool that works for the job seeker.</li>
               <li>Personal information stays out of the repo. The Android app has been run and tested and matches the desktop app.</li>
-              <li><a href="https://github.com/wpearson-svg/job_search_app">Source on GitHub</a></li>
+              <li><a href="#wildthing">More about WildThing below</a> &middot; <a href="https://github.com/wpearson-svg/job_search_app">Source on GitHub</a></li>
             </ul>
           </div>
           <div class="work-entry">
@@ -513,6 +703,7 @@
               <li>This was a prototype test in an isolated environment, with stand-in systems as part of the design. Nothing was delivered to the client as a product.</li>
               <li>Contributed to project decisions, weighing feasibility against what the client's requirements call for.</li>
               <li>Prepared and prioritized client-facing questions ahead of live Q&amp;A sessions with the client's team.</li>
+              <li><a href="#isa">More about Isa, with screenshots, below</a></li>
             </ul>
           </div>
         </div>
@@ -684,6 +875,254 @@
     </div>
   </nav>
 </div>
+
+<section class="project project--wildthing" id="wildthing" aria-labelledby="wildthing-title">
+  <div class="project-inner">
+    <h2 id="wildthing-title">WildThing</h2>
+    <p class="project-lede">A job-search app for Windows and Android. It finds job postings, scores each one against a resume, shows what is missing, hands the writing to the user&rsquo;s own AI assistant, and tracks every application through to an offer.</p>
+
+    <dl class="project-facts">
+      <div><dt>Platforms</dt><dd>Windows desktop and Android</dd></div>
+      <div><dt>License</dt><dd>Free and open source (AGPL-3.0)</dd></div>
+      <div><dt>Built</dt><dd>AI-assisted, with Claude as the coding partner</dd></div>
+    </dl>
+    <a class="project-link" href="https://github.com/wpearson-svg/job_search_app">View the source on GitHub</a>
+
+    <figure>
+      <img src="images/wildthing/01-postings-dark.png" width="1440" height="900" loading="lazy" decoding="async" alt="The Postings page in the dark theme: a ranked list of job postings with match scores and statuses, the selected posting below and progress on the right.">
+    </figure>
+    <p class="project-note">All screenshots use made-up demo data: a sample user and fictional companies.</p>
+
+    <div class="project-group">
+      <h3>What it does</h3>
+
+      <div class="project-item">
+        <h4>Find</h4>
+        <p>One button fetches postings from several sources, including major job boards, USAJOBS, and company boards. Each source can be switched on or off. Any posting can also be pasted in, or shared to the phone app from a browser. Duplicates listed on several sites are merged into one posting that keeps every link, and postings outside the places the user can work are dropped.</p>
+      </div>
+
+      <div class="project-item">
+        <h4>Score</h4>
+        <p>Each posting gets a 0 to 100 match score from the user&rsquo;s master resume and target job titles. The posting page shows exactly why: the skills the resume shows, and what the posting asks for that it doesn&rsquo;t.</p>
+        <figure>
+          <img src="images/wildthing/02-posting-page.png" width="1440" height="1100" loading="lazy" decoding="async" alt="A posting page showing an 85 match score, 8 skills the resume shows, 3 gaps, and buttons that send resume requests to the user&rsquo;s AI.">
+        </figure>
+      </div>
+
+      <div class="project-item">
+        <h4>Close the gaps</h4>
+        <p>A skill the resume doesn&rsquo;t mention but the user really has can be marked &ldquo;I have this&rdquo; and counts from then on. The Gap plan page ranks the gaps across every posting by how often each appears and whether it is required, then asks the user&rsquo;s AI for a study plan sized to the hours available each week.</p>
+        <figure>
+          <img src="images/wildthing/05-gap-plan.png" width="1440" height="900" loading="lazy" decoding="async" alt="The Gap plan page, ranking missing skills across postings by how often each appears and whether it is required.">
+        </figure>
+      </div>
+
+      <div class="project-item">
+        <h4>Apply</h4>
+        <p>Each posting can produce a tailored resume, a cover letter, or interview prep. WildThing never calls an AI itself. It writes a request, either to copy and paste or as a file in a shared folder, and any assistant that can read and write files picks it up. The replies are filed with their postings, and every request tells the AI to use only facts from the user&rsquo;s own resume.</p>
+        <figure>
+          <img src="images/wildthing/06-ai-queue.png" width="1440" height="900" loading="lazy" decoding="async" alt="The AI queue page, showing two requests waiting for the assistant&rsquo;s replies.">
+        </figure>
+      </div>
+
+      <div class="project-item">
+        <h4>Track</h4>
+        <p>Each application moves through Saved, Applied, Phone screen, Interview, and Offer, with dates and notes. Applications with no news after 14 days are flagged for a follow-up, and interviews get calendar links. A weekly summary counts what was sent and what moved forward, as plain text ready to paste into a check-in.</p>
+        <figure>
+          <img src="images/wildthing/03-applications.png" width="1440" height="900" loading="lazy" decoding="async" alt="The Applications page: counts by status, upcoming interviews, and a follow-up flag.">
+        </figure>
+      </div>
+
+      <div class="project-item">
+        <h4>Desktop and phone</h4>
+        <p>The Android app has the same features as the desktop app, and the two stay in step through Google Drive or the user&rsquo;s own WebDAV server. On narrow screens the menu slides over the page and postings become cards.</p>
+        <figure class="project-figure--narrow">
+          <img src="images/wildthing/09-phone-views.png" width="1000" height="900" loading="lazy" decoding="async" alt="Postings and a posting page on a phone-sized screen.">
+        </figure>
+      </div>
+    </div>
+
+    <div class="project-group">
+      <h3>Design decisions</h3>
+      <ul class="project-list">
+        <li><strong>Private by default.</strong> Everything runs on the user&rsquo;s own devices, with no WildThing account, no server, and no tracking. Personal data stays outside the app folder, and keys are never shown again once saved.</li>
+        <li><strong>Bring your own AI.</strong> Calling a model directly would mean an account, a bill, and a resume leaving through a third party. WildThing writes plain-text requests and reads the replies back, so any assistant that can work with files can do the writing, and copy and paste always works.</li>
+        <li><strong>Honest scoring.</strong> The score comes from a skill list, not from a model that might be confidently wrong. The app shows which words matched, so a user can see why a score is what it is and correct it. Its own documentation says it plainly: matching is a word list, not understanding.</li>
+        <li><strong>One behaviour, two apps.</strong> The desktop and Android apps are separate, but they must behave the same, and shared test cases check that they do.</li>
+        <li><strong>Sync without a server.</strong> The two devices share a folder in Google Drive or on any WebDAV server. Changes made on both devices are caught, and the user chooses which to keep.</li>
+        <li><strong>A calm, plain interface.</strong> Forest green and gold, the system font, no emoji, and short sentences that say what happened and what to do next.</li>
+      </ul>
+    </div>
+
+    <div class="project-group">
+      <h3>Tech</h3>
+      <p class="project-text">The desktop app runs locally in Python with a browser interface and a local database. The Android app is written in Kotlin. Both were built with Claude.</p>
+    </div>
+
+    <p class="project-top"><a href="#paths">Back to the tiles</a></p>
+  </div>
+</section>
+
+<section class="project project--isa" id="isa" aria-labelledby="isa-title">
+  <div class="project-inner">
+    <h2 id="isa-title">Isa</h2>
+    <p class="project-lede">A working prototype of an AI assistant for the volunteer chapter leaders of an international member association. Isa answers from the association&rsquo;s approved documents only, shows the source behind every answer, and hands anything it can&rsquo;t answer to a person.</p>
+
+    <dl class="project-facts">
+      <div><dt>Team</dt><dd>Second Star Collective, three people, in the i.c.stars program</dd></div>
+      <div><dt>My role</dt><dd>Project Lead</dd></div>
+      <div><dt>Result</dt><dd>Selected as the winning solution at the final presentation, November 2026</dd></div>
+    </dl>
+
+    <div class="gallery" id="isaGallery" role="region" aria-roledescription="carousel" aria-label="Isa screenshots">
+      <ul class="gallery-track" tabindex="0" aria-label="Screenshots. Use the left and right arrow keys to move between them.">
+        <li class="gallery-slide" aria-roledescription="slide" aria-label="1 of 6">
+          <figure>
+            <a class="gallery-frame" href="assets/isa/isa-direct-answer.png" aria-label="Open the direct answer screenshot full size">
+              <picture>
+                <source srcset="assets/isa/isa-direct-answer.webp" type="image/webp">
+                <img src="assets/isa/isa-direct-answer.png" width="900" height="1523" loading="lazy" decoding="async" alt="The Isa chat panel answering how many board meetings a chapter must hold. A green summary says the answer came from the association&rsquo;s guidance, four passed checks are listed, and three source cards name the guidebook pages it came from.">
+              </picture>
+            </a>
+            <figcaption>An answer in the association&rsquo;s own words, with the checks it passed and the pages it came from.</figcaption>
+          </figure>
+        </li>
+        <li class="gallery-slide" aria-roledescription="slide" aria-label="2 of 6">
+          <figure>
+            <a class="gallery-frame" href="assets/isa/isa-spanish.png" aria-label="Open the Spanish answer screenshot full size">
+              <picture>
+                <source srcset="assets/isa/isa-spanish.webp" type="image/webp">
+                <img src="assets/isa/isa-spanish.png" width="900" height="1525" loading="lazy" decoding="async" alt="The same board-meetings answer given in Spanish, with a Show the English link and the same guidebook sources below it.">
+              </picture>
+            </a>
+            <figcaption>The same question asked in Spanish, answered in Spanish from the same sources.</figcaption>
+          </figure>
+        </li>
+        <li class="gallery-slide" aria-roledescription="slide" aria-label="3 of 6">
+          <figure>
+            <a class="gallery-frame" href="assets/isa/isa-handoff.png" aria-label="Open the hand-off screenshot full size">
+              <picture>
+                <source srcset="assets/isa/isa-handoff.webp" type="image/webp">
+                <img src="assets/isa/isa-handoff.png" width="900" height="1523" loading="lazy" decoding="async" alt="A leader writes that a board member keeps bothering them at meetings. Isa marks it as passed to a person, gives a ticket reference number, and explains who will follow up.">
+              </picture>
+            </a>
+            <figcaption>A sensitive question goes to a person, with a reference number to follow up on.</figcaption>
+          </figure>
+        </li>
+        <li class="gallery-slide" aria-roledescription="slide" aria-label="4 of 6">
+          <figure>
+            <a class="gallery-frame" href="assets/isa/isa-today.png" aria-label="Open the Today view screenshot full size">
+              <picture>
+                <source srcset="assets/isa/isa-today.webp" type="image/webp">
+                <img src="assets/isa/isa-today.png" width="1800" height="1643" loading="lazy" decoding="async" alt="The chat beside the Today panel on a new president&rsquo;s third day. The step Meet your Chapter Experience contact shows a sample contact and three ways to connect: book a welcome call in the leader&rsquo;s time zone, send an introduction, or join a group welcome.">
+              </picture>
+            </a>
+            <figcaption>Day 3 for a new president: the Today view and three ways to meet their support contact.</figcaption>
+          </figure>
+        </li>
+        <li class="gallery-slide" aria-roledescription="slide" aria-label="5 of 6">
+          <figure>
+            <a class="gallery-frame" href="assets/isa/isa-notebook.png" aria-label="Open the succession notebook screenshot full size">
+              <picture>
+                <source srcset="assets/isa/isa-notebook.webp" type="image/webp">
+                <img src="assets/isa/isa-notebook.png" width="1800" height="1336" loading="lazy" decoding="async" alt="The succession notebook for a sample chapter, listing decisions, unfinished work, contacts and what worked, left by the previous president, with filters and an Ask button.">
+              </picture>
+            </a>
+            <figcaption>The succession notebook: what the last president left for the next one, sample data.</figcaption>
+          </figure>
+        </li>
+        <li class="gallery-slide" aria-roledescription="slide" aria-label="6 of 6">
+          <figure>
+            <a class="gallery-frame" href="assets/isa/isa-content-health.png" aria-label="Open the Content Health Dashboard screenshot full size">
+              <picture>
+                <source srcset="assets/isa/isa-content-health.webp" type="image/webp">
+                <img src="assets/isa/isa-content-health.png" width="1800" height="880" loading="lazy" decoding="async" alt="Part of the Content Health Dashboard: bar charts of how questions were handled, a count of questions that found nothing, and a table of the most-used passages in the approved documents.">
+              </picture>
+            </a>
+            <figcaption>The Content Health Dashboard shows the client&rsquo;s team which content gets used and where the gaps are.</figcaption>
+          </figure>
+        </li>
+      </ul>
+      <div class="gallery-controls">
+        <button type="button" class="gallery-btn" data-dir="-1" aria-label="Previous screenshot">&larr;</button>
+        <span class="gallery-count" aria-live="polite">1 of 6</span>
+        <button type="button" class="gallery-btn" data-dir="1" aria-label="Next screenshot">&rarr;</button>
+      </div>
+    </div>
+    <p class="project-note">Screenshots come from the prototype, with sample people and test data. The client&rsquo;s name is replaced with generic wording.</p>
+
+    <div class="project-group">
+      <h3>What Isa does</h3>
+      <ul class="project-list">
+        <li><strong>Answers with sources.</strong> Leaders ask in plain language and get an answer drawn only from the association&rsquo;s approved documents, with the page it came from. It also works in Spanish and Amharic.</li>
+        <li><strong>Knows when a person should answer.</strong> Questions outside its scope are turned away politely, and sensitive ones go to the support team as a ticket with a reference number.</li>
+        <li><strong>Guides new presidents.</strong> A 90-day Today view sets out each week&rsquo;s steps, a succession notebook passes from one president to the next, and a Listen Library reads documents aloud.</li>
+      </ul>
+    </div>
+
+    <div class="project-group">
+      <h3>What I did as Project Lead</h3>
+      <ul class="project-list">
+        <li>Led the plan and coordinated the team across three sprints, from the proposal to the final presentation.</li>
+        <li>Built the chat interface, the two dashboards the client&rsquo;s team would use to run Isa (one for rules and settings, one for content health), and a launcher that starts and monitors the whole system, all AI-assisted.</li>
+        <li>Designed the testing method: real questions sent through the prototype with every step checked, then fixed what testing found.</li>
+      </ul>
+    </div>
+
+    <div class="project-group">
+      <h3>Outcome</h3>
+      <p class="project-text">The client panel selected our solution as the winner. Its feedback singled out the onboarding guide, the content dashboard and the branding.</p>
+    </div>
+
+    <p class="project-top"><a href="#paths">Back to the tiles</a></p>
+  </div>
+</section>
+
+<script>
+  // Isa screenshot gallery: buttons and arrow keys move one slide; swiping
+  // scrolls natively. The counter follows whichever slide is in view.
+  (function () {
+    var root = document.getElementById('isaGallery');
+    if (!root) return;
+    var track = root.querySelector('.gallery-track');
+    var slides = Array.prototype.slice.call(track.querySelectorAll('.gallery-slide'));
+    var prev = root.querySelector('[data-dir="-1"]');
+    var next = root.querySelector('[data-dir="1"]');
+    var count = root.querySelector('.gallery-count');
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Distance between the starts of two slides (slide width plus the gap).
+    function step() {
+      return (slides[1] ? slides[1].offsetLeft - slides[0].offsetLeft : track.clientWidth) || 1;
+    }
+    function current() {
+      return Math.max(0, Math.min(slides.length - 1, Math.round(track.scrollLeft / step())));
+    }
+    function update() {
+      var i = current();
+      count.textContent = (i + 1) + ' of ' + slides.length;
+      prev.disabled = i === 0;
+      next.disabled = i === slides.length - 1;
+    }
+    function go(i) {
+      i = Math.max(0, Math.min(slides.length - 1, i));
+      track.scrollTo({ left: i * step(), behavior: reduce ? 'auto' : 'smooth' });
+    }
+
+    prev.addEventListener('click', function () { go(current() - 1); });
+    next.addEventListener('click', function () { go(current() + 1); });
+    track.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowRight') { e.preventDefault(); go(current() + 1); }
+      else if (e.key === 'ArrowLeft') { e.preventDefault(); go(current() - 1); }
+      else if (e.key === 'Home') { e.preventDefault(); go(0); }
+      else if (e.key === 'End') { e.preventDefault(); go(slides.length - 1); }
+    });
+    var t = null;
+    track.addEventListener('scroll', function () { clearTimeout(t); t = setTimeout(update, 60); }, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+  })();
+</script>
 
 <script>
   (function () {
