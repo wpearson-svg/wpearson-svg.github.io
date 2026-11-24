@@ -81,27 +81,28 @@
   html:not(.js) .slide { position: static; width: calc(50% - 2px); }
   html:not(.js) .slide img { height: auto; }
 
-  .jump { display: none; }
+  .mrail { display: none; }
 
-  /* Mobile: top to bottom, alternating sides */
+  /* Mobile: one line down the left, photos on its right */
   @media (max-width: 47.99rem) {
     .rail { display: none; }
-    .frame { height: auto; aspect-ratio: 4 / 3; }
-    .card { height: auto; }
-    .dot { display: flex; position: absolute; left: 50%; top: 0.1rem; width: 1.75rem; height: 1.75rem; margin: 0 0 0 -0.875rem; border-radius: 50%; background: var(--brass); color: var(--night); font-size: 0.75rem; font-weight: 500; align-items: center; justify-content: center; z-index: 1; }
-    .jump { display: flex; gap: 0.4rem; overflow-x: auto; padding: 0 0 1rem; margin: 0 0 0.5rem; }
-    .jump a { flex: none; min-width: 2.5rem; text-align: center; border: 1px solid var(--off); border-radius: 8px; padding: 0.3rem 0.7rem; text-decoration: none; color: var(--dim); font-size: 0.85rem; }
-    .jump a:hover { color: var(--brass); border-color: var(--brass); }
-    .tl { display: block; overflow: visible; position: relative; }
-    .tl::before { content: ""; position: absolute; left: 50%; top: 0.5rem; bottom: 0.5rem; width: 1px; background: var(--brass); }
+    .mrail { display: block; position: sticky; top: 0; z-index: 5; background: var(--night); margin: 0 calc(-1 * clamp(1.25rem, 5vw, 2rem)) 1rem; padding: 0.4rem clamp(1.25rem, 5vw, 2rem) 0.5rem; border-bottom: 1px solid #1E2A44; }
+    html:not(.js) .mrail { display: none; }
+    .mtrack { position: relative; height: 2.1rem; }
+    .mtrack::before { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 2px; margin-top: -1px; background: var(--brass); }
+    .mtrack .wd::after { display: none; }
+    .mlabel { margin: 0; text-align: center; color: var(--brass); font-family: Spectral, Georgia, serif; font-size: 0.85rem; letter-spacing: 0.04em; line-height: 1.2; }
+    .wkc { scroll-margin-top: 4.5rem; }
+    .tlwrap { --H: auto; }
+    .tl { display: block; height: auto; overflow: visible; position: relative; padding-left: 2.6rem; }
+    .tl::before { content: ""; position: absolute; left: 0.875rem; top: 0.9rem; bottom: 0.9rem; width: 1px; background: var(--brass); }
+    .tl::after { display: none; }
     .wkc { width: auto; height: auto; padding: 0 0 2rem; }
-    .wkc::before { display: none; }
-    .dot { top: 0.1rem; margin-top: 0; }
-    .card { position: relative; left: auto; right: auto; width: 76%; padding-top: 2rem; background: var(--night); }
-    .up .card { margin-right: auto; }
-    .down .card { margin-left: auto; }
-    .down .card h2, .down .meta { text-align: right; }
+    .dot { display: flex; position: absolute; left: -2.6rem; top: 0; width: 1.75rem; height: 1.75rem; margin: 0; border-radius: 50%; background: var(--brass); color: var(--night); font-size: 0.75rem; font-weight: 500; align-items: center; justify-content: center; z-index: 1; }
+    .card { position: relative; left: auto; right: auto; top: auto; bottom: auto; width: 100%; height: auto; }
     .up .card, .down .card { top: auto; bottom: auto; }
+    .card h2 { line-height: 1.75rem; }
+    .frame { height: auto; aspect-ratio: 4 / 3; }
     .nav { width: 1.75rem; }
   }
 
@@ -129,7 +130,7 @@
   <p class="dl-note">Full-size originals in one zip file. The download is hosted on GitHub.</p>
   <hr class="rule">
 
-  <nav class="jump" aria-label="Jump to a week"><a href="#wk-1">1</a><a href="#wk-2">2</a><a href="#wk-3">3</a><a href="#wk-4">4</a><a href="#wk-5">5</a><a href="#wk-6">6</a><a href="#wk-7">7</a><a href="#wk-9">9</a><a href="#wk-10">10</a><a href="#wk-11">11</a><a href="#wk-12">12</a><a href="#wk-13">13</a><a href="#others">Others</a></nav>
+  <div class="mrail" id="mrail" role="group" aria-label="Jump to a week"><div class="mtrack" id="mtrack"></div><p class="mlabel" id="mlabel" aria-hidden="true"></p></div>
   <div class="tlwrap">
     <ol class="tl" id="tl" tabindex="0" aria-label="Cycle 7 timeline by week">
       <li class="wkc up" id="wk-1" data-label="Week 1">
@@ -512,6 +513,38 @@
     if (e.key === 'ArrowLeft') { e.preventDefault(); tl.scrollBy({ left: -step(), behavior: 'smooth' }); }
   });
   sync();
+
+  // Phone: a small timeline pinned to the top; weeks you've passed bunch left, weeks ahead bunch right
+  var mrail = document.getElementById('mrail'), mtrack = document.getElementById('mtrack'), mlabel = document.getElementById('mlabel');
+  var calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var mdots = weeks.map(function (w) {
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'wd';
+    b.setAttribute('aria-label', 'Go to ' + w.li.getAttribute('data-label'));
+    b.innerHTML = '<span>' + w.li.querySelector('.dot').textContent + '</span>';
+    b.addEventListener('click', function () { w.li.scrollIntoView({ behavior: calm ? 'auto' : 'smooth', block: 'start' }); });
+    mtrack.appendChild(b);
+    return b;
+  });
+  function placeM() {
+    var tw = mtrack.clientWidth; if (!tw) return;
+    var y = window.scrollY + mrail.offsetHeight + 30, cur = 0, n = weeks.length;
+    weeks.forEach(function (w, k) { if (w.li.getBoundingClientRect().top + window.scrollY <= y) cur = k; });
+    var lo = 8 + cur * GAP + 22, hi = tw - 8 - (n - 1 - cur) * GAP - 22;
+    var cx = Math.max(lo, Math.min(hi, tw / 2));
+    weeks.forEach(function (w, k) {
+      var on = k === cur, pos = on ? cx : k < cur ? 8 + k * GAP : tw - 8 - (n - 1 - k) * GAP;
+      mdots[k].style.left = pos + 'px';
+      mdots[k].classList.toggle('on', on);
+      if (on) mdots[k].setAttribute('aria-current', 'true'); else mdots[k].removeAttribute('aria-current');
+    });
+    mlabel.textContent = weeks[cur].li.getAttribute('data-label');
+  }
+  var raf = 0;
+  function queueM() { if (!raf) raf = requestAnimationFrame(function () { raf = 0; placeM(); }); }
+  window.addEventListener('scroll', queueM, { passive: true });
+  window.addEventListener('resize', queueM);
+  placeM();
 
   // Full-size viewer, stepping through one week's photos
   var dlg = document.getElementById('viewer');
