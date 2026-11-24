@@ -88,9 +88,14 @@
     .rail { display: none; }
     .mrail { display: block; position: sticky; top: 0; z-index: 5; background: var(--night); margin: 0 calc(-1 * clamp(1.25rem, 5vw, 2rem)) 1rem; padding: 0.4rem clamp(1.25rem, 5vw, 2rem) 0.5rem; border-bottom: 1px solid #1E2A44; }
     html:not(.js) .mrail { display: none; }
-    .mtrack { position: relative; height: 2.1rem; }
+    .mtrack { position: relative; height: 2.6rem; overflow: hidden; touch-action: pan-y; user-select: none; -webkit-user-select: none; cursor: grab; }
     .mtrack::before { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 2px; margin-top: -1px; background: var(--brass); }
-    .mtrack .wd::after { display: none; }
+    .mtrack .wd { position: absolute; top: 50%; left: 0; width: 10px; height: 10px; margin: -5px 0 0 -5px; padding: 0; border: 1.5px solid var(--brass); border-radius: 50%; background: var(--brass); color: var(--brass); font: inherit; font-size: 0; line-height: 1; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: left .22s ease, width .2s ease, height .2s ease, margin .2s ease, border-radius .2s ease, background .2s ease; }
+    .mtrack.drag .wd { transition: none; }
+    .mtrack .wd::before { display: none; }
+    .mtrack .wd::after { content: ""; position: absolute; inset: -10px -1px; background: transparent; opacity: 1; transform: none; padding: 0; bottom: auto; left: auto; pointer-events: auto; }
+    .mtrack .wd.on { width: 2.5rem; height: 1.9rem; margin: -0.95rem 0 0 -1.25rem; border-radius: 8px; background: var(--night); font-size: 0.85rem; }
+    .mtrack .wd.on.cur { background: var(--brass); color: var(--night); }
     .mlabel { margin: 0; text-align: center; color: var(--brass); font-family: Spectral, Georgia, serif; font-size: 0.85rem; letter-spacing: 0.04em; line-height: 1.2; }
     .wkc { scroll-margin-top: 4.5rem; }
     .tlwrap { --H: auto; }
@@ -514,37 +519,78 @@
   });
   sync();
 
-  // Phone: a small timeline pinned to the top; weeks you've passed bunch left, weeks ahead bunch right
+  // Phone: a week strip pinned to the top that you drag sideways. Weeks off either edge bunch up there; tap a week to go to it.
   var mrail = document.getElementById('mrail'), mtrack = document.getElementById('mtrack'), mlabel = document.getElementById('mlabel');
+  var MSTEP = 52, MG = 9, PAD = 30, N = weeks.length, vs = 0, curW = -1, touchedAt = 0, justDragged = false;
   var calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var mdots = weeks.map(function (w) {
+  function maxVs() { return Math.max(0, (N - 1) * MSTEP + 2 * PAD - mtrack.clientWidth); }
+  function goTo(k) { vs = Math.max(0, Math.min(maxVs(), k * MSTEP - (mtrack.clientWidth / 2 - PAD))); mplace(); }
+  var mdots = weeks.map(function (w, k) {
     var b = document.createElement('button');
     b.type = 'button'; b.className = 'wd';
     b.setAttribute('aria-label', 'Go to ' + w.li.getAttribute('data-label'));
     b.innerHTML = '<span>' + w.li.querySelector('.dot').textContent + '</span>';
-    b.addEventListener('click', function () { w.li.scrollIntoView({ behavior: calm ? 'auto' : 'smooth', block: 'start' }); });
+    b.addEventListener('click', function () {
+      if (justDragged) return;
+      touchedAt = 0; goTo(k);
+      w.li.scrollIntoView({ behavior: calm ? 'auto' : 'smooth', block: 'start' });
+    });
+    b.addEventListener('focus', function () { goTo(k); });
     mtrack.appendChild(b);
     return b;
   });
-  function placeM() {
+  function mplace() {
     var tw = mtrack.clientWidth; if (!tw) return;
-    var y = window.scrollY + mrail.offsetHeight + 30, cur = 0, n = weeks.length;
-    weeks.forEach(function (w, k) { if (w.li.getBoundingClientRect().top + window.scrollY <= y) cur = k; });
-    var lo = 8 + cur * GAP + 22, hi = tw - 8 - (n - 1 - cur) * GAP - 22;
-    var cx = Math.max(lo, Math.min(hi, tw / 2));
-    weeks.forEach(function (w, k) {
-      var on = k === cur, pos = on ? cx : k < cur ? 8 + k * GAP : tw - 8 - (n - 1 - k) * GAP;
+    var xs = weeks.map(function (w, k) { return PAD + k * MSTEP - vs; });
+    var nL = 0, nR = 0, it, k;
+    for (it = 0; it < 10; it++) {
+      var lo0 = 24 + nL * MG, hi0 = tw - 24 - nR * MG, a2 = 0, b2 = 0;
+      xs.forEach(function (x) { if (x < lo0) a2++; else if (x > hi0) b2++; });
+      if (a2 === nL && b2 === nR) break;
+      nL = a2; nR = b2;
+    }
+    var lo = 24 + nL * MG, hi = tw - 24 - nR * MG, li = 0, ri = 0;
+    for (k = 0; k < N; k++) {
+      var x = xs[k], on = x >= lo && x <= hi, pos;
+      if (on) pos = x; else if (x < lo) pos = 8 + (li++) * MG; else pos = tw - 8 - (nR - 1 - ri++) * MG;
       mdots[k].style.left = pos + 'px';
       mdots[k].classList.toggle('on', on);
-      if (on) mdots[k].setAttribute('aria-current', 'true'); else mdots[k].removeAttribute('aria-current');
-    });
-    mlabel.textContent = weeks[cur].li.getAttribute('data-label');
+    }
+    mlabel.textContent = weeks[Math.max(0, Math.min(N - 1, Math.round((vs + mtrack.clientWidth / 2 - PAD) / MSTEP)))].li.getAttribute('data-label');
   }
-  var raf = 0;
-  function queueM() { if (!raf) raf = requestAnimationFrame(function () { raf = 0; placeM(); }); }
-  window.addEventListener('scroll', queueM, { passive: true });
-  window.addEventListener('resize', queueM);
-  placeM();
+  function mcur() {
+    if (!mtrack.clientWidth) return;
+    var y = window.scrollY + mrail.offsetHeight + 30, cur = 0;
+    weeks.forEach(function (w, k) { if (w.li.getBoundingClientRect().top + window.scrollY <= y) cur = k; });
+    if (cur !== curW) {
+      curW = cur;
+      mdots.forEach(function (d, k) { d.classList.toggle('cur', k === cur); if (k === cur) d.setAttribute('aria-current', 'true'); else d.removeAttribute('aria-current'); });
+      if (Date.now() - touchedAt > 1500) goTo(cur);
+    }
+  }
+  var drag = null;
+  mtrack.addEventListener('pointerdown', function (e) { drag = { x: e.clientX, vs: vs, id: e.pointerId, moved: false }; });
+  mtrack.addEventListener('pointermove', function (e) {
+    if (!drag) return;
+    var dx = e.clientX - drag.x;
+    if (!drag.moved && Math.abs(dx) > 6) { drag.moved = true; mtrack.classList.add('drag'); try { mtrack.setPointerCapture(drag.id); } catch (err) {} }
+    if (drag.moved) { vs = Math.max(0, Math.min(maxVs(), drag.vs - dx)); touchedAt = Date.now(); mplace(); }
+  });
+  function endDrag() {
+    if (!drag) return;
+    if (drag.moved) {
+      justDragged = true; setTimeout(function () { justDragged = false; }, 60);
+      mtrack.classList.remove('drag');
+      vs = Math.max(0, Math.min(maxVs(), Math.round(vs / MSTEP) * MSTEP)); mplace();
+    }
+    drag = null;
+  }
+  mtrack.addEventListener('pointerup', endDrag);
+  mtrack.addEventListener('pointercancel', endDrag);
+  var raf2 = 0;
+  window.addEventListener('scroll', function () { if (!raf2) raf2 = requestAnimationFrame(function () { raf2 = 0; mcur(); }); }, { passive: true });
+  window.addEventListener('resize', function () { mplace(); mcur(); });
+  mplace(); mcur();
 
   // Full-size viewer, stepping through one week's photos
   var dlg = document.getElementById('viewer');
