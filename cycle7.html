@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Cycle 7 Photos — Willis Pearson</title>
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:wght@400;500&family=Work+Sans:wght@400;500&display=swap" rel="stylesheet">
+<script>document.documentElement.className += ' js';</script>
+<style>
+  :root { --night: #0F1626; --deep: #182238; --star: #F2EDE3; --dim: #97A1B5; --brass: #C79A4F; --off: #4A5570; }
+  * { box-sizing: border-box; }
+  body { margin: 0; min-height: 100vh; background: var(--night); color: var(--star); font-family: "Work Sans", system-ui, sans-serif; line-height: 1.7; -webkit-font-smoothing: antialiased; }
+  .page { width: 100%; max-width: 80rem; margin: 0 auto; padding: clamp(2rem, 6vw, 4rem) clamp(1.25rem, 5vw, 2rem) 4rem; }
+  a { color: var(--star); text-underline-offset: 3px; }
+  a:hover { color: var(--brass); }
+  a:focus-visible, button:focus-visible, input:focus-visible, .tl:focus-visible { outline: 2px solid var(--brass); outline-offset: 3px; }
+  .back { display: inline-block; color: var(--brass); font-size: 0.9rem; margin-bottom: 2rem; }
+  h1 { font-family: Spectral, Georgia, serif; font-weight: 500; font-size: clamp(2rem, 6vw, 3rem); letter-spacing: -0.015em; line-height: 1.1; margin: 0 0 0.5rem; }
+  .sub { color: var(--brass); margin: 0 0 1.5rem; }
+  .intro { font-family: Spectral, Georgia, serif; font-size: 1.15rem; line-height: 1.7; max-width: 36rem; margin: 0 0 1.5rem; }
+  .dl { display: inline-block; background: var(--brass); color: var(--night); padding: 0.65rem 1.2rem; border-radius: 8px; text-decoration: none; font-weight: 500; }
+  .dl:hover { background: var(--star); color: var(--night); }
+  .dl-note { color: var(--dim); font-size: 0.85rem; margin: 0.6rem 0 0; }
+  .rule { width: 3rem; height: 1px; background: var(--brass); border: 0; margin: 2.5rem 0; }
+
+  /* Timeline (desktop: left to right) */
+  .tlwrap { --H: clamp(28rem, 100svh - 2rem, 46rem); --half: calc((var(--H) - 5rem) / 2); --fh: calc(var(--half) - 4.4rem); --liw: calc(var(--fh) * 1.334 + 5.5rem); position: relative; }
+  .tl { list-style: none; margin: 0; padding: 0; display: flex; overflow-x: auto; overflow-y: hidden; height: var(--H); scrollbar-width: none; }
+  .tl::-webkit-scrollbar { display: none; }
+  .wkc { position: relative; flex: none; width: var(--liw); height: var(--H); }
+  .tl::after { content: ""; flex: none; width: calc(100% - var(--liw)); }
+  .dot { display: none; }
+  .card { position: absolute; left: 0.75rem; right: 0.75rem; height: var(--half); }
+  .up .card { top: 0; }
+  .down .card { bottom: 0; }
+  .frame { height: var(--fh); }
+
+  /* The middle line is the scrub bar */
+  .rail { position: absolute; left: 0; right: 0; top: 50%; height: 3rem; margin-top: -1.5rem; display: flex; align-items: center; gap: 0.75rem; z-index: 2; }
+  .track { position: relative; flex: 1; height: 3rem; touch-action: none; cursor: pointer; }
+  .track::before { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 2px; margin-top: -1px; background: var(--brass); }
+  .wd { position: absolute; top: 50%; left: 0; width: 1rem; height: 1.9rem; margin: -0.95rem 0 0 -0.5rem; padding: 0; border: 0; background: transparent; color: var(--night); font: inherit; font-size: 0; font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: left .25s ease, width .2s ease, margin .2s ease; }
+  .wd::before { content: ""; width: 0.65rem; height: 0.65rem; border-radius: 50%; border: 1.5px solid var(--brass); background: var(--night); box-sizing: border-box; transition: all .2s ease; }
+  .wd:hover::before { background: var(--star); border-color: var(--star); }
+  .wd.on { width: 1.9rem; margin-left: -0.95rem; font-size: 0.75rem; }
+  .wd.on::before { position: absolute; inset: 0; width: auto; height: auto; background: var(--brass); }
+  .wd.on:hover::before { background: var(--star); }
+  .wd span { position: relative; }
+  .wd::after { content: attr(data-label); position: absolute; bottom: 2.2rem; left: 50%; transform: translateX(-50%); white-space: nowrap; background: var(--deep); color: var(--star); font-size: 0.75rem; padding: 0.15rem 0.5rem; border-radius: 6px; opacity: 0; pointer-events: none; z-index: 3; }
+  .wd:hover::after, .wd:focus-visible::after { opacity: 1; }
+  .wd:focus-visible { outline: 2px solid var(--star); outline-offset: 2px; border-radius: 50%; }
+  @media (prefers-reduced-motion: reduce) { .wd, .wd::before { transition: none; } }
+  .step { flex: none; width: 2.25rem; height: 2.25rem; padding: 0; border: 1px solid var(--brass); background: var(--night); color: var(--brass); border-radius: 50%; font: inherit; font-size: 1.3rem; line-height: 1; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  .step:hover { background: var(--brass); color: var(--night); }
+  .step[aria-disabled="true"] { border-color: var(--off); color: var(--off); cursor: default; background: var(--night); }
+  .step[aria-disabled="true"]:hover { background: var(--night); color: var(--off); }
+  .card h2 { font-family: Spectral, Georgia, serif; font-weight: 500; font-size: 0.95rem; color: var(--brass); text-transform: uppercase; letter-spacing: 0.06em; margin: 0; line-height: 1.4; }
+  .card h2 .keep { text-transform: none; }
+  .meta { color: var(--dim); font-size: 0.8rem; margin: 0 0 0.5rem; line-height: 1.4; }
+  .count { color: var(--dim); font-size: 0.8rem; margin: 0.35rem 0 0; text-align: center; }
+
+  .car { display: flex; align-items: stretch; background: var(--deep); border-radius: 8px; overflow: hidden; }
+  .frame { flex: 1; min-width: 0; position: relative; background: #0B111E; }
+  .slide { display: block; position: absolute; inset: 0; }
+  .slide img { width: 100%; height: 100%; object-fit: contain; display: block; }
+  .js .slide { display: none; }
+  .js .slide.on { display: block; }
+  .nav { flex: none; width: 2rem; border: 0; border-radius: 0; background: var(--deep); color: var(--brass); font-size: 1.6rem; line-height: 1; cursor: pointer; padding: 0; display: flex; align-items: center; justify-content: center; }
+  .nav:hover { background: var(--brass); color: var(--night); }
+  .nav[aria-disabled="true"] { color: var(--off); cursor: default; background: var(--deep); }
+  .nav[aria-disabled="true"]:hover { background: var(--deep); color: var(--off); }
+  .nav:focus-visible { outline-offset: -3px; }
+  html:not(.js) .nav { display: none; }
+  html:not(.js) .frame { aspect-ratio: auto; display: flex; flex-wrap: wrap; gap: 4px; }
+  html:not(.js) .slide { position: static; width: calc(50% - 2px); }
+  html:not(.js) .slide img { height: auto; }
+
+  .jump { display: none; }
+
+  /* Mobile: top to bottom, alternating sides */
+  @media (max-width: 47.99rem) {
+    .rail { display: none; }
+    .frame { height: auto; aspect-ratio: 4 / 3; }
+    .card { height: auto; }
+    .dot { display: flex; position: absolute; left: 50%; top: 0.1rem; width: 1.75rem; height: 1.75rem; margin: 0 0 0 -0.875rem; border-radius: 50%; background: var(--brass); color: var(--night); font-size: 0.75rem; font-weight: 500; align-items: center; justify-content: center; z-index: 1; }
+    .jump { display: flex; gap: 0.4rem; overflow-x: auto; padding: 0 0 1rem; margin: 0 0 0.5rem; }
+    .jump a { flex: none; min-width: 2.5rem; text-align: center; border: 1px solid var(--off); border-radius: 8px; padding: 0.3rem 0.7rem; text-decoration: none; color: var(--dim); font-size: 0.85rem; }
+    .jump a:hover { color: var(--brass); border-color: var(--brass); }
+    .tl { display: block; overflow: visible; position: relative; }
+    .tl::before { content: ""; position: absolute; left: 50%; top: 0.5rem; bottom: 0.5rem; width: 1px; background: var(--brass); }
+    .wkc { width: auto; height: auto; padding: 0 0 2rem; }
+    .wkc::before { display: none; }
+    .dot { top: 0.1rem; margin-top: 0; }
+    .card { position: relative; left: auto; right: auto; width: 76%; padding-top: 2rem; background: var(--night); }
+    .up .card { margin-right: auto; }
+    .down .card { margin-left: auto; }
+    .down .card h2, .down .meta { text-align: right; }
+    .up .card, .down .card { top: auto; bottom: auto; }
+    .nav { width: 1.75rem; }
+  }
+
+  /* Photo viewer */
+  dialog.viewer { border: 0; padding: 0; width: 100%; max-width: 100vw; height: 100%; max-height: 100vh; background: rgba(15, 22, 38, 0.97); color: var(--star); }
+  dialog.viewer::backdrop { background: rgba(15, 22, 38, 0.97); }
+  .viewer-inner { display: flex; flex-direction: column; height: 100%; padding: 1rem; }
+  .viewer-stage { flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center; }
+  .viewer-stage img { max-width: 100%; max-height: 100%; width: auto; height: auto; border-radius: 6px; }
+  .viewer-bar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-top: 0.75rem; }
+  .viewer-cap { color: var(--dim); font-size: 0.9rem; text-align: center; flex: 1; margin: 0; }
+  .viewer button { background: var(--deep); color: var(--star); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; min-width: 2.75rem; min-height: 2.75rem; padding: 0 0.9rem; font: inherit; cursor: pointer; }
+  .viewer button:hover { background: #1E2A44; }
+  .viewer button[aria-disabled="true"] { color: var(--off); cursor: default; }
+  @media (prefers-reduced-motion: reduce) { .tl { scroll-behavior: auto; } }
+</style>
+</head>
+<body>
+<main class="page">
+  <a class="back" href="index.html">&larr; Back to home</a>
+  <h1>Cycle 7</h1>
+  <p class="sub">i.c.stars &middot; September&ndash;November 2026</p>
+  <p class="intro">Photos from Cycle 7 of the i.c.stars program, taken between September 3, 2026 and November 23, 2026.</p>
+  <a class="dl" href="https://github.com/wpearson-svg/wpearson-svg.github.io/releases/download/Pictures/Photos-For-Cycle7.zip">Download all photos (zip, 144 MB)</a>
+  <p class="dl-note">Full-size originals in one zip file. The download is hosted on GitHub.</p>
+  <hr class="rule">
+
+  <nav class="jump" aria-label="Jump to a week"><a href="#wk-1">1</a><a href="#wk-2">2</a><a href="#wk-3">3</a><a href="#wk-4">4</a><a href="#wk-5">5</a><a href="#wk-6">6</a><a href="#wk-7">7</a><a href="#wk-9">9</a><a href="#wk-10">10</a><a href="#wk-11">11</a><a href="#wk-12">12</a><a href="#wk-13">13</a><a href="#others">Others</a></nav>
+  <div class="tlwrap">
+    <ol class="tl" id="tl" tabindex="0" aria-label="Cycle 7 timeline by week">
+      <li class="wkc up" id="wk-1" data-label="Week 1">
+        <span class="dot" aria-hidden="true">1</span>
+        <section class="card" aria-labelledby="wk-1-h">
+          <h2 id="wk-1-h">Week 1</h2>
+          <p class="meta">7 photos</p>
+          <div class="car" role="group" aria-roledescription="carousel" aria-label="Week 1 photos">
+            <button type="button" class="nav prev" aria-label="Previous photo, Week 1"><span aria-hidden="true">&#8249;</span></button>
+            <div class="frame">
+              <a class="slide" href="images/cycle7/web/photo-001.jpg" data-cap="September 3, 2026"><img src="images/cycle7/thumb/photo-001.jpg" width="222" height="480" loading="lazy" decoding="async" alt="Cycle 7 photo, September 3, 2026 (1 of 6 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-002.jpg" data-cap="September 3, 2026"><img src="images/cycle7/thumb/photo-002.jpg" width="222" height="480" loading="lazy" decoding="async" alt="Cycle 7 photo, September 3, 2026 (2 of 6 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-003.jpg" data-cap="September 3, 2026"><img src="images/cycle7/thumb/photo-003.jpg" width="222" height="480" loading="lazy" decoding="async" alt="Cycle 7 photo, September 3, 2026 (3 of 6 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-004.jpg" data-cap="September 3, 2026"><img src="images/cycle7/thumb/photo-004.jpg" width="222" height="480" loading="lazy" decoding="async" alt="Cycle 7 photo, September 3, 2026 (4 of 6 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-005.jpg" data-cap="September 3, 2026"><img src="images/cycle7/thumb/photo-005.jpg" width="222" height="480" loading="lazy" decoding="async" alt="Cycle 7 photo, September 3, 2026 (5 of 6 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-006.jpg" data-cap="September 3, 2026"><img src="images/cycle7/thumb/photo-006.jpg" width="222" height="480" loading="lazy" decoding="async" alt="Cycle 7 photo, September 3, 2026 (6 of 6 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-007.jpg" data-cap="September 4, 2026"><img src="images/cycle7/thumb/photo-007.jpg" width="480" height="236" loading="lazy" decoding="async" alt="Cycle 7 photo, September 4, 2026 (1 of 1 that day)"></a>
+            </div>
+            <button type="button" class="nav next" aria-label="Next photo, Week 1"><span aria-hidden="true">&#8250;</span></button>
+          </div>
+          <p class="count" aria-live="polite"><span class="cur">1</span> of 7</p>
+        </section>
+      </li>
+      <li class="wkc down" id="wk-2" data-label="Week 2">
+        <span class="dot" aria-hidden="true">2</span>
+        <section class="card" aria-labelledby="wk-2-h">
+          <h2 id="wk-2-h">Week 2</h2>
+          <p class="meta">3 photos</p>
+          <div class="car" role="group" aria-roledescription="carousel" aria-label="Week 2 photos">
+            <button type="button" class="nav prev" aria-label="Previous photo, Week 2"><span aria-hidden="true">&#8249;</span></button>
+            <div class="frame">
+              <a class="slide" href="images/cycle7/web/photo-008.jpg" data-cap="September 10, 2026"><img src="images/cycle7/thumb/photo-008.jpg" width="480" height="360" loading="lazy" decoding="async" alt="Cycle 7 photo, September 10, 2026 (1 of 1 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-009.jpg" data-cap="September 11, 2026"><img src="images/cycle7/thumb/photo-009.jpg" width="222" height="480" loading="lazy" decoding="async" alt="Cycle 7 photo, September 11, 2026 (1 of 2 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-010.jpg" data-cap="September 11, 2026"><img src="images/cycle7/thumb/photo-010.jpg" width="480" height="222" loading="lazy" decoding="async" alt="Cycle 7 photo, September 11, 2026 (2 of 2 that day)"></a>
+            </div>
+            <button type="button" class="nav next" aria-label="Next photo, Week 2"><span aria-hidden="true">&#8250;</span></button>
+          </div>
+          <p class="count" aria-live="polite"><span class="cur">1</span> of 3</p>
+        </section>
+      </li>
+      <li class="wkc up" id="wk-3" data-label="Week 3 · iOpener">
+        <span class="dot" aria-hidden="true">3</span>
+        <section class="card" aria-labelledby="wk-3-h">
+          <h2 id="wk-3-h">Week 3 · <span class="keep">iOpener</span></h2>
+          <p class="meta">41 photos</p>
+          <div class="car" role="group" aria-roledescription="carousel" aria-label="Week 3 · iOpener photos">
+            <button type="button" class="nav prev" aria-label="Previous photo, Week 3"><span aria-hidden="true">&#8249;</span></button>
+            <div class="frame">
+              <a class="slide" href="images/cycle7/web/photo-011.jpg" data-cap="September 14, 2026"><img src="images/cycle7/thumb/photo-011.jpg" width="480" height="222" loading="lazy" decoding="async" alt="Cycle 7 photo, September 14, 2026 (1 of 1 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-012.jpg" data-cap="September 15, 2026"><img src="images/cycle7/thumb/photo-012.jpg" width="480" height="360" loading="lazy" decoding="async" alt="Cycle 7 photo, September 15, 2026 (1 of 2 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-013.jpg" data-cap="September 15, 2026"><img src="images/cycle7/thumb/photo-013.jpg" width="480" height="360" loading="lazy" decoding="async" alt="Cycle 7 photo, September 15, 2026 (2 of 2 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-014.jpg" data-cap="September 17, 2026"><img src="images/cycle7/thumb/photo-014.jpg" width="320" height="480" loading="lazy" decoding="async" alt="Cycle 7 photo, September 17, 2026 (1 of 2 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-015.jpg" data-cap="September 17, 2026"><img src="images/cycle7/thumb/photo-015.jpg" width="480" height="320" loading="lazy" decoding="async" alt="Cycle 7 photo, September 17, 2026 (2 of 2 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-016.jpg" data-cap="September 18, 2026"><img src="images/cycle7/thumb/photo-016.jpg" width="480" height="320" loading="lazy" decoding="async" alt="Cycle 7 photo, September 18, 2026 (1 of 36 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-017.jpg" data-cap="September 18, 2026"><img src="images/cycle7/thumb/photo-017.jpg" width="480" height="320" loading="lazy" decoding="async" alt="Cycle 7 photo, September 18, 2026 (2 of 36 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-018.jpg" data-cap="September 18, 2026"><img src="images/cycle7/thumb/photo-018.jpg" width="480" height="320" loading="lazy" decoding="async" alt="Cycle 7 photo, September 18, 2026 (3 of 36 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-019.jpg" data-cap="September 18, 2026"><img src="images/cycle7/thumb/photo-019.jpg" width="480" height="320" loading="lazy" decoding="async" alt="Cycle 7 photo, September 18, 2026 (4 of 36 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-020.jpg" data-cap="September 18, 2026"><img src="images/cycle7/thumb/photo-020.jpg" width="480" height="320" loading="lazy" decoding="async" alt="Cycle 7 photo, September 18, 2026 (5 of 36 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-021.jpg" data-cap="September 18, 2026"><img src="images/cycle7/thumb/photo-021.jpg" width="480" height="320" loading="lazy" decoding="async" alt="Cycle 7 photo, September 18, 2026 (6 of 36 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-022.jpg" data-cap="September 18, 2026"><img src="images/cycle7/thumb/photo-022.jpg" width="480" height="320" loading="lazy" decoding="async" alt="Cycle 7 photo, September 18, 2026 (7 of 36 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-023.jpg" data-cap="September 18, 2026"><img src="images/cycle7/thumb/photo-023.jpg" width="480" height="320" loading="lazy" decoding="async" alt="Cycle 7 photo, September 18, 2026 (8 of 36 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-024.jpg" data-cap="September 18, 2026"><img src="images/cycle7/thumb/photo-024.jpg" width="480" height="320" loading="lazy" decoding="async" alt="Cycle 7 photo, September 18, 2026 (9 of 36 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-025.jpg" data-cap="September 18, 2026"><img src="images/cycle7/thumb/photo-025.jpg" width="480" height="320" loading="lazy" decoding="async" alt="Cycle 7 photo, September 18, 2026 (10 of 36 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-026.jpg" data-cap="September 18, 2026"><img src="images/cycle7/thumb/photo-026.jpg" width="320" height="480" loading="lazy" decoding="async" alt="Cycle 7 photo, September 18, 2026 (11 of 36 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-027.jpg" data-cap="September 18, 2026"><img src="images/cycle7/thumb/photo-027.jpg" width="480" height="320" loading="lazy" decoding="async" alt="Cycle 7 photo, September 18, 2026 (12 of 36 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-028.jpg" data-cap="September 18, 2026"><img src="images/cycle7/thumb/photo-028.jpg" width="320" height="480" loading="lazy" decoding="async" alt="Cycle 7 photo, September 18, 2026 (13 of 36 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-029.jpg" data-cap="September 18, 2026"><img src="images/cycle7/thumb/photo-029.jpg" width="480" height="320" loading="lazy" decoding="async" alt="Cycle 7 photo, September 18, 2026 (14 of 36 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-030.jpg" data-cap="September 18, 2026"><img src="images/cycle7/thumb/photo-030.jpg" width="480" height="320" loading="lazy" decoding="async" alt="Cycle 7 photo, September 18, 2026 (15 of 36 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-031.jpg" data-cap="September 18, 2026"><img src="images/cycle7/thumb/photo-031.jpg" width="342" height="480" loading="lazy" decoding="async" alt="Cycle 7 photo, September 18, 2026 (16 of 36 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-032.jpg" data-cap="September 18, 2026"><img src="images/cycle7/thumb/photo-032.jpg" width="480" height="320" loading="lazy" decoding="async" alt="Cycle 7 photo, September 18, 2026 (17 of 36 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-033.jpg" data-cap="September 18, 2026"><img src="images/cycle7/thumb/photo-033.jpg" width="480" height="320" loading="lazy" decoding="async" alt="Cycle 7 photo, September 18, 2026 (18 of 36 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-034.jpg" data-cap="September 18, 2026"><img src="images/cycle7/thumb/photo-034.jpg" width="430" height="480" loading="lazy" decoding="async" alt="Cycle 7 photo, September 18, 2026 (19 of 36 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-035.jpg" data-cap="September 18, 2026"><img src="images/cycle7/thumb/photo-035.jpg" width="320" height="480" loading="lazy" decoding="async" alt="Cycle 7 photo, September 18, 2026 (20 of 36 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-036.jpg" data-cap="September 18, 2026"><img src="images/cycle7/thumb/photo-036.jpg" width="320" height="480" loading="lazy" decoding="async" alt="Cycle 7 photo, September 18, 2026 (21 of 36 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-037.jpg" data-cap="September 18, 2026"><img src="images/cycle7/thumb/photo-037.jpg" width="480" height="320" loading="lazy" decoding="async" alt="Cycle 7 photo, September 18, 2026 (22 of 36 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-038.jpg" data-cap="September 18, 2026"><img src="images/cycle7/thumb/photo-038.jpg" width="320" height="480" loading="lazy" decoding="async" alt="Cycle 7 photo, September 18, 2026 (23 of 36 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-039.jpg" data-cap="September 18, 2026"><img src="images/cycle7/thumb/photo-039.jpg" width="480" height="320" loading="lazy" decoding="async" alt="Cycle 7 photo, September 18, 2026 (24 of 36 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-040.jpg" data-cap="September 18, 2026"><img src="images/cycle7/thumb/photo-040.jpg" width="320" height="480" loading="lazy" decoding="async" alt="Cycle 7 photo, September 18, 2026 (25 of 36 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-041.jpg" data-cap="September 18, 2026"><img src="images/cycle7/thumb/photo-041.jpg" width="480" height="320" loading="lazy" decoding="async" alt="Cycle 7 photo, September 18, 2026 (26 of 36 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-042.jpg" data-cap="September 18, 2026"><img src="images/cycle7/thumb/photo-042.jpg" width="480" height="320" loading="lazy" decoding="async" alt="Cycle 7 photo, September 18, 2026 (27 of 36 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-043.jpg" data-cap="September 18, 2026"><img src="images/cycle7/thumb/photo-043.jpg" width="480" height="320" loading="lazy" decoding="async" alt="Cycle 7 photo, September 18, 2026 (28 of 36 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-044.jpg" data-cap="September 18, 2026"><img src="images/cycle7/thumb/photo-044.jpg" width="480" height="320" loading="lazy" decoding="async" alt="Cycle 7 photo, September 18, 2026 (29 of 36 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-045.jpg" data-cap="September 18, 2026"><img src="images/cycle7/thumb/photo-045.jpg" width="480" height="320" loading="lazy" decoding="async" alt="Cycle 7 photo, September 18, 2026 (30 of 36 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-046.jpg" data-cap="September 18, 2026"><img src="images/cycle7/thumb/photo-046.jpg" width="480" height="320" loading="lazy" decoding="async" alt="Cycle 7 photo, September 18, 2026 (31 of 36 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-047.jpg" data-cap="September 18, 2026"><img src="images/cycle7/thumb/photo-047.jpg" width="480" height="320" loading="lazy" decoding="async" alt="Cycle 7 photo, September 18, 2026 (32 of 36 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-048.jpg" data-cap="September 18, 2026"><img src="images/cycle7/thumb/photo-048.jpg" width="480" height="320" loading="lazy" decoding="async" alt="Cycle 7 photo, September 18, 2026 (33 of 36 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-049.jpg" data-cap="September 18, 2026"><img src="images/cycle7/thumb/photo-049.jpg" width="222" height="480" loading="lazy" decoding="async" alt="Cycle 7 photo, September 18, 2026 (34 of 36 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-050.jpg" data-cap="September 18, 2026"><img src="images/cycle7/thumb/photo-050.jpg" width="222" height="480" loading="lazy" decoding="async" alt="Cycle 7 photo, September 18, 2026 (35 of 36 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-051.jpg" data-cap="September 18, 2026"><img src="images/cycle7/thumb/photo-051.jpg" width="222" height="480" loading="lazy" decoding="async" alt="Cycle 7 photo, September 18, 2026 (36 of 36 that day)"></a>
+            </div>
+            <button type="button" class="nav next" aria-label="Next photo, Week 3"><span aria-hidden="true">&#8250;</span></button>
+          </div>
+          <p class="count" aria-live="polite"><span class="cur">1</span> of 41</p>
+        </section>
+      </li>
+      <li class="wkc down" id="wk-4" data-label="Week 4">
+        <span class="dot" aria-hidden="true">4</span>
+        <section class="card" aria-labelledby="wk-4-h">
+          <h2 id="wk-4-h">Week 4</h2>
+          <p class="meta">3 photos</p>
+          <div class="car" role="group" aria-roledescription="carousel" aria-label="Week 4 photos">
+            <button type="button" class="nav prev" aria-label="Previous photo, Week 4"><span aria-hidden="true">&#8249;</span></button>
+            <div class="frame">
+              <a class="slide" href="images/cycle7/web/photo-052.jpg" data-cap="September 24, 2026"><img src="images/cycle7/thumb/photo-052.jpg" width="480" height="222" loading="lazy" decoding="async" alt="Cycle 7 photo, September 24, 2026 (1 of 3 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-053.jpg" data-cap="September 24, 2026"><img src="images/cycle7/thumb/photo-053.jpg" width="480" height="222" loading="lazy" decoding="async" alt="Cycle 7 photo, September 24, 2026 (2 of 3 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-054.jpg" data-cap="September 24, 2026"><img src="images/cycle7/thumb/photo-054.jpg" width="480" height="222" loading="lazy" decoding="async" alt="Cycle 7 photo, September 24, 2026 (3 of 3 that day)"></a>
+            </div>
+            <button type="button" class="nav next" aria-label="Next photo, Week 4"><span aria-hidden="true">&#8250;</span></button>
+          </div>
+          <p class="count" aria-live="polite"><span class="cur">1</span> of 3</p>
+        </section>
+      </li>
+      <li class="wkc up" id="wk-5" data-label="Week 5 · Geek Week">
+        <span class="dot" aria-hidden="true">5</span>
+        <section class="card" aria-labelledby="wk-5-h">
+          <h2 id="wk-5-h">Week 5 · Geek Week</h2>
+          <p class="meta">3 photos</p>
+          <div class="car" role="group" aria-roledescription="carousel" aria-label="Week 5 · Geek Week photos">
+            <button type="button" class="nav prev" aria-label="Previous photo, Week 5"><span aria-hidden="true">&#8249;</span></button>
+            <div class="frame">
+              <a class="slide" href="images/cycle7/web/photo-055.jpg" data-cap="September 29, 2026"><img src="images/cycle7/thumb/photo-055.jpg" width="480" height="222" loading="lazy" decoding="async" alt="Cycle 7 photo, September 29, 2026 (1 of 1 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-056.jpg" data-cap="October 1, 2026"><img src="images/cycle7/thumb/photo-056.jpg" width="480" height="222" loading="lazy" decoding="async" alt="Cycle 7 photo, October 1, 2026 (1 of 2 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-057.jpg" data-cap="October 1, 2026"><img src="images/cycle7/thumb/photo-057.jpg" width="480" height="222" loading="lazy" decoding="async" alt="Cycle 7 photo, October 1, 2026 (2 of 2 that day)"></a>
+            </div>
+            <button type="button" class="nav next" aria-label="Next photo, Week 5"><span aria-hidden="true">&#8250;</span></button>
+          </div>
+          <p class="count" aria-live="polite"><span class="cur">1</span> of 3</p>
+        </section>
+      </li>
+      <li class="wkc down" id="wk-6" data-label="Week 6">
+        <span class="dot" aria-hidden="true">6</span>
+        <section class="card" aria-labelledby="wk-6-h">
+          <h2 id="wk-6-h">Week 6</h2>
+          <p class="meta">4 photos</p>
+          <div class="car" role="group" aria-roledescription="carousel" aria-label="Week 6 photos">
+            <button type="button" class="nav prev" aria-label="Previous photo, Week 6"><span aria-hidden="true">&#8249;</span></button>
+            <div class="frame">
+              <a class="slide" href="images/cycle7/web/photo-058.jpg" data-cap="October 5, 2026"><img src="images/cycle7/thumb/photo-058.jpg" width="480" height="222" loading="lazy" decoding="async" alt="Cycle 7 photo, October 5, 2026 (1 of 1 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-059.jpg" data-cap="October 6, 2026"><img src="images/cycle7/thumb/photo-059.jpg" width="480" height="360" loading="lazy" decoding="async" alt="Cycle 7 photo, October 6, 2026 (1 of 1 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-060.jpg" data-cap="October 8, 2026"><img src="images/cycle7/thumb/photo-060.jpg" width="480" height="270" loading="lazy" decoding="async" alt="Cycle 7 photo, October 8, 2026 (1 of 1 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-061.jpg" data-cap="October 9, 2026"><img src="images/cycle7/thumb/photo-061.jpg" width="480" height="270" loading="lazy" decoding="async" alt="Cycle 7 photo, October 9, 2026 (1 of 1 that day)"></a>
+            </div>
+            <button type="button" class="nav next" aria-label="Next photo, Week 6"><span aria-hidden="true">&#8250;</span></button>
+          </div>
+          <p class="count" aria-live="polite"><span class="cur">1</span> of 4</p>
+        </section>
+      </li>
+      <li class="wkc up" id="wk-7" data-label="Week 7">
+        <span class="dot" aria-hidden="true">7</span>
+        <section class="card" aria-labelledby="wk-7-h">
+          <h2 id="wk-7-h">Week 7</h2>
+          <p class="meta">1 photo</p>
+          <div class="car" role="group" aria-roledescription="carousel" aria-label="Week 7 photos">
+            <button type="button" class="nav prev" aria-label="Previous photo, Week 7"><span aria-hidden="true">&#8249;</span></button>
+            <div class="frame">
+              <a class="slide" href="images/cycle7/web/photo-062.jpg" data-cap="October 12, 2026"><img src="images/cycle7/thumb/photo-062.jpg" width="480" height="360" loading="lazy" decoding="async" alt="Cycle 7 photo, October 12, 2026 (1 of 1 that day)"></a>
+            </div>
+            <button type="button" class="nav next" aria-label="Next photo, Week 7"><span aria-hidden="true">&#8250;</span></button>
+          </div>
+          <p class="count" aria-live="polite"><span class="cur">1</span> of 1</p>
+        </section>
+      </li>
+      <li class="wkc down" id="wk-9" data-label="Week 9">
+        <span class="dot" aria-hidden="true">9</span>
+        <section class="card" aria-labelledby="wk-9-h">
+          <h2 id="wk-9-h">Week 9</h2>
+          <p class="meta">3 photos</p>
+          <div class="car" role="group" aria-roledescription="carousel" aria-label="Week 9 photos">
+            <button type="button" class="nav prev" aria-label="Previous photo, Week 9"><span aria-hidden="true">&#8249;</span></button>
+            <div class="frame">
+              <a class="slide" href="images/cycle7/web/photo-063.jpg" data-cap="October 26, 2026"><img src="images/cycle7/thumb/photo-063.jpg" width="480" height="222" loading="lazy" decoding="async" alt="Cycle 7 photo, October 26, 2026 (1 of 1 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-064.jpg" data-cap="October 27, 2026"><img src="images/cycle7/thumb/photo-064.jpg" width="480" height="222" loading="lazy" decoding="async" alt="Cycle 7 photo, October 27, 2026 (1 of 1 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-065.jpg" data-cap="October 29, 2026"><img src="images/cycle7/thumb/photo-065.jpg" width="480" height="222" loading="lazy" decoding="async" alt="Cycle 7 photo, October 29, 2026 (1 of 1 that day)"></a>
+            </div>
+            <button type="button" class="nav next" aria-label="Next photo, Week 9"><span aria-hidden="true">&#8250;</span></button>
+          </div>
+          <p class="count" aria-live="polite"><span class="cur">1</span> of 3</p>
+        </section>
+      </li>
+      <li class="wkc up" id="wk-10" data-label="Week 10">
+        <span class="dot" aria-hidden="true">10</span>
+        <section class="card" aria-labelledby="wk-10-h">
+          <h2 id="wk-10-h">Week 10</h2>
+          <p class="meta">3 photos</p>
+          <div class="car" role="group" aria-roledescription="carousel" aria-label="Week 10 photos">
+            <button type="button" class="nav prev" aria-label="Previous photo, Week 10"><span aria-hidden="true">&#8249;</span></button>
+            <div class="frame">
+              <a class="slide" href="images/cycle7/web/photo-066.jpg" data-cap="November 2, 2026"><img src="images/cycle7/thumb/photo-066.jpg" width="480" height="222" loading="lazy" decoding="async" alt="Cycle 7 photo, November 2, 2026 (1 of 1 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-067.jpg" data-cap="November 3, 2026"><img src="images/cycle7/thumb/photo-067.jpg" width="480" height="222" loading="lazy" decoding="async" alt="Cycle 7 photo, November 3, 2026 (1 of 1 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-068.jpg" data-cap="November 5, 2026"><img src="images/cycle7/thumb/photo-068.jpg" width="480" height="222" loading="lazy" decoding="async" alt="Cycle 7 photo, November 5, 2026 (1 of 1 that day)"></a>
+            </div>
+            <button type="button" class="nav next" aria-label="Next photo, Week 10"><span aria-hidden="true">&#8250;</span></button>
+          </div>
+          <p class="count" aria-live="polite"><span class="cur">1</span> of 3</p>
+        </section>
+      </li>
+      <li class="wkc down" id="wk-11" data-label="Week 11">
+        <span class="dot" aria-hidden="true">11</span>
+        <section class="card" aria-labelledby="wk-11-h">
+          <h2 id="wk-11-h">Week 11</h2>
+          <p class="meta">3 photos</p>
+          <div class="car" role="group" aria-roledescription="carousel" aria-label="Week 11 photos">
+            <button type="button" class="nav prev" aria-label="Previous photo, Week 11"><span aria-hidden="true">&#8249;</span></button>
+            <div class="frame">
+              <a class="slide" href="images/cycle7/web/photo-069.jpg" data-cap="November 9, 2026"><img src="images/cycle7/thumb/photo-069.jpg" width="480" height="222" loading="lazy" decoding="async" alt="Cycle 7 photo, November 9, 2026 (1 of 1 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-070.jpg" data-cap="November 10, 2026"><img src="images/cycle7/thumb/photo-070.jpg" width="480" height="222" loading="lazy" decoding="async" alt="Cycle 7 photo, November 10, 2026 (1 of 1 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-071.jpg" data-cap="November 12, 2026"><img src="images/cycle7/thumb/photo-071.jpg" width="480" height="222" loading="lazy" decoding="async" alt="Cycle 7 photo, November 12, 2026 (1 of 1 that day)"></a>
+            </div>
+            <button type="button" class="nav next" aria-label="Next photo, Week 11"><span aria-hidden="true">&#8250;</span></button>
+          </div>
+          <p class="count" aria-live="polite"><span class="cur">1</span> of 3</p>
+        </section>
+      </li>
+      <li class="wkc up" id="wk-12" data-label="Week 12">
+        <span class="dot" aria-hidden="true">12</span>
+        <section class="card" aria-labelledby="wk-12-h">
+          <h2 id="wk-12-h">Week 12</h2>
+          <p class="meta">4 photos</p>
+          <div class="car" role="group" aria-roledescription="carousel" aria-label="Week 12 photos">
+            <button type="button" class="nav prev" aria-label="Previous photo, Week 12"><span aria-hidden="true">&#8249;</span></button>
+            <div class="frame">
+              <a class="slide" href="images/cycle7/web/photo-072.jpg" data-cap="November 17, 2026"><img src="images/cycle7/thumb/photo-072.jpg" width="480" height="222" loading="lazy" decoding="async" alt="Cycle 7 photo, November 17, 2026 (1 of 1 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-073.jpg" data-cap="November 19, 2026"><img src="images/cycle7/thumb/photo-073.jpg" width="222" height="480" loading="lazy" decoding="async" alt="Cycle 7 photo, November 19, 2026 (1 of 3 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-074.jpg" data-cap="November 19, 2026"><img src="images/cycle7/thumb/photo-074.jpg" width="222" height="480" loading="lazy" decoding="async" alt="Cycle 7 photo, November 19, 2026 (2 of 3 that day)"></a>
+              <a class="slide" href="images/cycle7/web/photo-075.jpg" data-cap="November 19, 2026"><img src="images/cycle7/thumb/photo-075.jpg" width="480" height="222" loading="lazy" decoding="async" alt="Cycle 7 photo, November 19, 2026 (3 of 3 that day)"></a>
+            </div>
+            <button type="button" class="nav next" aria-label="Next photo, Week 12"><span aria-hidden="true">&#8250;</span></button>
+          </div>
+          <p class="count" aria-live="polite"><span class="cur">1</span> of 4</p>
+        </section>
+      </li>
+      <li class="wkc down" id="wk-13" data-label="Week 13">
+        <span class="dot" aria-hidden="true">13</span>
+        <section class="card" aria-labelledby="wk-13-h">
+          <h2 id="wk-13-h">Week 13</h2>
+          <p class="meta">1 photo</p>
+          <div class="car" role="group" aria-roledescription="carousel" aria-label="Week 13 photos">
+            <button type="button" class="nav prev" aria-label="Previous photo, Week 13"><span aria-hidden="true">&#8249;</span></button>
+            <div class="frame">
+              <a class="slide" href="images/cycle7/web/photo-076.jpg" data-cap="November 23, 2026"><img src="images/cycle7/thumb/photo-076.jpg" width="480" height="222" loading="lazy" decoding="async" alt="Cycle 7 photo, November 23, 2026 (1 of 1 that day)"></a>
+            </div>
+            <button type="button" class="nav next" aria-label="Next photo, Week 13"><span aria-hidden="true">&#8250;</span></button>
+          </div>
+          <p class="count" aria-live="polite"><span class="cur">1</span> of 1</p>
+        </section>
+      </li>
+      <li class="wkc up" id="others" data-label="Others">
+        <span class="dot" aria-hidden="true">…</span>
+        <section class="card" aria-labelledby="others-h">
+          <h2 id="others-h">Others</h2>
+          <p class="meta">14 photos</p>
+          <div class="car" role="group" aria-roledescription="carousel" aria-label="Others photos">
+            <button type="button" class="nav prev" aria-label="Previous photo, Others"><span aria-hidden="true">&#8249;</span></button>
+            <div class="frame">
+              <a class="slide" href="images/cycle7/web/photo-077.jpg" data-cap="Cycle 7"><img src="images/cycle7/thumb/photo-077.jpg" width="480" height="360" loading="lazy" decoding="async" alt="Cycle 7 photo (1 of 14 in Others)"></a>
+              <a class="slide" href="images/cycle7/web/photo-078.jpg" data-cap="Cycle 7"><img src="images/cycle7/thumb/photo-078.jpg" width="480" height="270" loading="lazy" decoding="async" alt="Cycle 7 photo (2 of 14 in Others)"></a>
+              <a class="slide" href="images/cycle7/web/photo-079.jpg" data-cap="Cycle 7"><img src="images/cycle7/thumb/photo-079.jpg" width="480" height="270" loading="lazy" decoding="async" alt="Cycle 7 photo (3 of 14 in Others)"></a>
+              <a class="slide" href="images/cycle7/web/photo-080.jpg" data-cap="Cycle 7"><img src="images/cycle7/thumb/photo-080.jpg" width="480" height="252" loading="lazy" decoding="async" alt="Cycle 7 photo (4 of 14 in Others)"></a>
+              <a class="slide" href="images/cycle7/web/photo-081.jpg" data-cap="Cycle 7"><img src="images/cycle7/thumb/photo-081.jpg" width="480" height="270" loading="lazy" decoding="async" alt="Cycle 7 photo (5 of 14 in Others)"></a>
+              <a class="slide" href="images/cycle7/web/photo-082.jpg" data-cap="Cycle 7"><img src="images/cycle7/thumb/photo-082.jpg" width="480" height="270" loading="lazy" decoding="async" alt="Cycle 7 photo (6 of 14 in Others)"></a>
+              <a class="slide" href="images/cycle7/web/photo-083.jpg" data-cap="Cycle 7"><img src="images/cycle7/thumb/photo-083.jpg" width="480" height="270" loading="lazy" decoding="async" alt="Cycle 7 photo (7 of 14 in Others)"></a>
+              <a class="slide" href="images/cycle7/web/photo-084.jpg" data-cap="Cycle 7"><img src="images/cycle7/thumb/photo-084.jpg" width="480" height="360" loading="lazy" decoding="async" alt="Cycle 7 photo (8 of 14 in Others)"></a>
+              <a class="slide" href="images/cycle7/web/photo-085.jpg" data-cap="Cycle 7"><img src="images/cycle7/thumb/photo-085.jpg" width="360" height="480" loading="lazy" decoding="async" alt="Cycle 7 photo (9 of 14 in Others)"></a>
+              <a class="slide" href="images/cycle7/web/photo-086.jpg" data-cap="Cycle 7"><img src="images/cycle7/thumb/photo-086.jpg" width="360" height="480" loading="lazy" decoding="async" alt="Cycle 7 photo (10 of 14 in Others)"></a>
+              <a class="slide" href="images/cycle7/web/photo-087.jpg" data-cap="Cycle 7"><img src="images/cycle7/thumb/photo-087.jpg" width="360" height="480" loading="lazy" decoding="async" alt="Cycle 7 photo (11 of 14 in Others)"></a>
+              <a class="slide" href="images/cycle7/web/photo-088.jpg" data-cap="Cycle 7"><img src="images/cycle7/thumb/photo-088.jpg" width="360" height="480" loading="lazy" decoding="async" alt="Cycle 7 photo (12 of 14 in Others)"></a>
+              <a class="slide" href="images/cycle7/web/photo-089.jpg" data-cap="Cycle 7"><img src="images/cycle7/thumb/photo-089.jpg" width="480" height="360" loading="lazy" decoding="async" alt="Cycle 7 photo (13 of 14 in Others)"></a>
+              <a class="slide" href="images/cycle7/web/photo-090.jpg" data-cap="Cycle 7"><img src="images/cycle7/thumb/photo-090.jpg" width="480" height="360" loading="lazy" decoding="async" alt="Cycle 7 photo (14 of 14 in Others)"></a>
+            </div>
+            <button type="button" class="nav next" aria-label="Next photo, Others"><span aria-hidden="true">&#8250;</span></button>
+          </div>
+          <p class="count" aria-live="polite"><span class="cur">1</span> of 14</p>
+        </section>
+      </li>
+    </ol>
+    <div class="rail" id="rail">
+      <button type="button" class="step" id="earlier" aria-label="Earlier weeks"><span aria-hidden="true">&#8249;</span></button>
+      <div class="track" id="track"></div>
+      <button type="button" class="step" id="later" aria-label="Later weeks"><span aria-hidden="true">&#8250;</span></button>
+    </div>
+  </div>
+</main>
+
+<dialog class="viewer" id="viewer" aria-label="Photo viewer">
+  <div class="viewer-inner">
+    <div class="viewer-stage"><img id="viewer-img" alt=""></div>
+    <div class="viewer-bar">
+      <button type="button" id="v-prev" aria-label="Previous photo"><span aria-hidden="true">&larr;</span></button>
+      <p class="viewer-cap" id="viewer-cap" aria-live="polite"></p>
+      <button type="button" id="v-next" aria-label="Next photo"><span aria-hidden="true">&rarr;</span></button>
+      <button type="button" id="v-close" aria-label="Close viewer">Close</button>
+    </div>
+  </div>
+</dialog>
+
+<script>
+(function () {
+  var weeks = Array.prototype.slice.call(document.querySelectorAll('.wkc')).map(function (li) {
+    return {
+      li: li,
+      slides: Array.prototype.slice.call(li.querySelectorAll('.slide')),
+      prev: li.querySelector('.prev'), next: li.querySelector('.next'),
+      cur: li.querySelector('.cur'), i: 0
+    };
+  });
+  function setDisabled(b, off) { b.setAttribute('aria-disabled', off ? 'true' : 'false'); }
+  function show(w, i) {
+    w.i = Math.max(0, Math.min(w.slides.length - 1, i));
+    w.slides.forEach(function (s, k) { s.classList.toggle('on', k === w.i); });
+    w.cur.textContent = w.i + 1;
+    setDisabled(w.prev, w.i === 0);
+    setDisabled(w.next, w.i === w.slides.length - 1);
+  }
+  weeks.forEach(function (w) {
+    show(w, 0);
+    w.prev.addEventListener('click', function () { if (w.prev.getAttribute('aria-disabled') !== 'true') show(w, w.i - 1); });
+    w.next.addEventListener('click', function () { if (w.next.getAttribute('aria-disabled') !== 'true') show(w, w.i + 1); });
+  });
+
+  // Timeline scrubbing (desktop)
+  var tl = document.getElementById('tl'), track = document.getElementById('track');
+  var earlier = document.getElementById('earlier'), later = document.getElementById('later');
+  var step = function () { return weeks[0].li.offsetWidth; };
+  function maxScroll() { return Math.max(0, tl.scrollWidth - tl.clientWidth); }
+  var GAP = 16;
+  var dots = weeks.map(function (w) {
+    var b = document.createElement('button');
+    var num = w.li.querySelector('.dot').textContent;
+    b.type = 'button'; b.className = 'wd';
+    b.setAttribute('data-label', w.li.getAttribute('data-label'));
+    b.setAttribute('aria-label', 'Go to ' + w.li.getAttribute('data-label'));
+    b.innerHTML = '<span>' + num + '</span>';
+    b.addEventListener('click', function () { tl.scrollTo({ left: Math.min(w.li.offsetLeft, maxScroll()), behavior: 'smooth' }); });
+    track.appendChild(b);
+    return b;
+  });
+  // Weeks whose card is on screen sit on the line at their card; the rest bunch up at the ends.
+  function place() {
+    var tw = track.clientWidth, off = track.getBoundingClientRect().left - tl.getBoundingClientRect().left;
+    var xs = weeks.map(function (w) { return w.li.offsetLeft + w.li.offsetWidth / 2 - tl.scrollLeft - off; });
+    var nL = 0, nR = 0, k, it;
+    for (it = 0; it < 4; it++) {
+      var tl2 = 22 + nL * GAP, tr2 = tw - 22 - nR * GAP, a = 0, b = 0;
+      xs.forEach(function (x) { if (x < tl2) a++; else if (x > tr2) b++; });
+      if (a === nL && b === nR) break;
+      nL = a; nR = b;
+    }
+    var lo = 22 + nL * GAP, hi = tw - 22 - nR * GAP, li = 0, ri = 0, first = -1;
+    for (k = 0; k < weeks.length; k++) {
+      var x = xs[k], on = x >= lo && x <= hi, pos;
+      if (on) { pos = x; if (first < 0) first = k; }
+      else if (x < lo) { pos = 8 + (li++) * GAP; }
+      else { pos = tw - 8 - (nR - 1 - ri++) * GAP; }
+      dots[k].style.left = pos + 'px';
+      dots[k].classList.toggle('on', on);
+      if (k === first && on) dots[k].setAttribute('aria-current', 'true'); else dots[k].removeAttribute('aria-current');
+    }
+  }
+  function sync() {
+    var m = maxScroll();
+    place();
+    setDisabled(earlier, tl.scrollLeft <= 1);
+    setDisabled(later, tl.scrollLeft >= m - 1);
+  }
+  tl.addEventListener('scroll', sync);
+  window.addEventListener('resize', sync);
+  function dragTo(e) {
+    var r = track.getBoundingClientRect();
+    tl.scrollLeft = Math.max(0, Math.min(1, (e.clientX - r.left) / r.width)) * maxScroll();
+  }
+  track.addEventListener('pointerdown', function (e) { if (e.target.closest('.wd')) return; track.setPointerCapture(e.pointerId); track.dragging = true; dragTo(e); });
+  track.addEventListener('pointermove', function (e) { if (track.dragging) dragTo(e); });
+  track.addEventListener('pointerup', function () { track.dragging = false; });
+  track.addEventListener('pointercancel', function () { track.dragging = false; });
+  earlier.addEventListener('click', function () { if (earlier.getAttribute('aria-disabled') !== 'true') tl.scrollBy({ left: -step(), behavior: 'smooth' }); });
+  later.addEventListener('click', function () { if (later.getAttribute('aria-disabled') !== 'true') tl.scrollBy({ left: step(), behavior: 'smooth' }); });
+  tl.addEventListener('keydown', function (e) {
+    if (e.target !== tl) return;
+    if (e.key === 'ArrowRight') { e.preventDefault(); tl.scrollBy({ left: step(), behavior: 'smooth' }); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); tl.scrollBy({ left: -step(), behavior: 'smooth' }); }
+  });
+  sync();
+
+  // Full-size viewer, stepping through one week's photos
+  var dlg = document.getElementById('viewer');
+  if (!dlg || typeof dlg.showModal !== 'function') return;
+  var img = document.getElementById('viewer-img'), cap = document.getElementById('viewer-cap');
+  var vp = document.getElementById('v-prev'), vn = document.getElementById('v-next');
+  var cw = null;
+  function vshow(i) {
+    cw.vi = Math.max(0, Math.min(cw.slides.length - 1, i));
+    var a = cw.slides[cw.vi];
+    img.src = a.getAttribute('href');
+    img.alt = a.querySelector('img').alt;
+    cap.textContent = a.getAttribute('data-cap') + ' \u00B7 ' + (cw.vi + 1) + ' of ' + cw.slides.length;
+    setDisabled(vp, cw.vi === 0); setDisabled(vn, cw.vi === cw.slides.length - 1);
+    var nx = cw.slides[cw.vi + 1]; if (nx) new Image().src = nx.getAttribute('href');
+  }
+  weeks.forEach(function (w) {
+    w.slides.forEach(function (a, k) {
+      a.addEventListener('click', function (e) { e.preventDefault(); cw = w; vshow(k); if (!dlg.open) dlg.showModal(); });
+    });
+  });
+  vp.addEventListener('click', function () { if (vp.getAttribute('aria-disabled') !== 'true') vshow(cw.vi - 1); });
+  vn.addEventListener('click', function () { if (vn.getAttribute('aria-disabled') !== 'true') vshow(cw.vi + 1); });
+  document.getElementById('v-close').addEventListener('click', function () { dlg.close(); });
+  dlg.addEventListener('click', function (e) { if (e.target === dlg) dlg.close(); });
+  dlg.addEventListener('close', function () { if (cw) { show(cw, cw.vi); cw.slides[cw.i].focus(); } });
+  document.addEventListener('keydown', function (e) {
+    if (!dlg.open) return;
+    if (e.key === 'ArrowLeft') { e.preventDefault(); vshow(cw.vi - 1); }
+    else if (e.key === 'ArrowRight') { e.preventDefault(); vshow(cw.vi + 1); }
+  });
+})();
+</script>
+</body>
+</html>
