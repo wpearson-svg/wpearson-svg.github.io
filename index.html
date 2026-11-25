@@ -605,6 +605,69 @@
   .gallery-btn:focus-visible { outline: 2px solid var(--p-accent); outline-offset: 2px; }
   .gallery-btn:disabled { opacity: 0.4; cursor: default; }
   .gallery-count { color: var(--p-muted); font-size: 0.9rem; min-width: 4.5rem; text-align: center; }
+
+  /* MireStrider: slate blue with pale marble blue, after Cyrene's roofs and walls. */
+  .project--mirestrider {
+    --p-bg: #16222E;
+    --p-card: #203243;
+    --p-line: #324A60;
+    --p-text: #EAF0F5;
+    --p-muted: #A8BACB;
+    --p-accent: #9CC3E6;
+    --p-link: #BBD7EF;
+    --p-btn: #5E8CB8;
+    --p-btn-text: #16222E;
+  }
+  .project--mirestrider .project-text + .project-text,
+  .project--mirestrider .project-item p + p,
+  .project--mirestrider .project-item figure + p { margin-top: 1rem; }
+  .project--mirestrider figure a { display: block; border-radius: 10px; }
+  /* --- Image selector ---
+     One screenshot at a time, with an arrow strip on each side and the text
+     below changing with the image. Slides share one grid cell, so the height
+     stays the same when switching. Without the script, everything stacks. */
+  .selector { display: grid; grid-template-columns: minmax(0, 1fr); margin-top: 1rem; }
+  .selector.is-ready { grid-template-columns: auto minmax(0, 1fr) auto; column-gap: 0.5rem; }
+  .selector:focus-visible { outline: 2px solid var(--p-accent); outline-offset: 4px; border-radius: 10px; }
+  .project .selector figure { margin: 0; }
+  .selector .selector-caption { margin: 0.75rem 0 0; }
+  .selector.is-ready .selector-stage,
+  .selector.is-ready .selector-captions { display: grid; grid-column: 2; }
+  .selector.is-ready .selector-captions { grid-row: 3; }
+  .selector.is-ready .selector-stage { grid-row: 1; align-items: center; touch-action: pan-y pinch-zoom; }
+  .selector.is-ready .selector-slide,
+  .selector.is-ready .selector-caption { grid-area: 1 / 1; visibility: hidden; }
+  .selector.is-ready .is-current { visibility: visible; }
+  .selector-strip {
+    grid-row: 1;
+    width: clamp(2rem, 6vw, 3rem);
+    padding: 0;
+    border: 1px solid var(--p-line);
+    border-radius: 10px;
+    background: var(--p-card);
+    color: var(--p-text);
+    font: inherit;
+    font-size: 1.8rem;
+    cursor: pointer;
+  }
+  .selector-strip[hidden] { display: none; }
+  .selector-strip--prev { grid-column: 1; }
+  .selector-strip--next { grid-column: 3; }
+  .selector-strip:hover:not(:disabled) { border-color: var(--p-accent); color: var(--p-accent); }
+  .selector-strip:focus-visible { outline: 2px solid var(--p-accent); outline-offset: 2px; }
+  .selector-strip:disabled { opacity: 0.35; cursor: default; }
+  .selector .selector-count { grid-column: 1 / -1; grid-row: 2; text-align: center; margin: 0.5rem 0 0; font-size: 0.9rem; }
+  .project-definitions {
+    margin: 0 0 1.5rem;
+    padding: 0.9rem 1rem;
+    background: var(--p-card);
+    border: 1px solid var(--p-line);
+    border-radius: 12px;
+    line-height: 1.6;
+  }
+  .project-definitions div + div { margin-top: 0.6rem; }
+  .project-definitions dt { display: inline; font-style: italic; font-weight: 500; color: var(--p-accent); margin-right: 0.4rem; }
+  .project-definitions dd { display: inline; margin: 0; font-size: 0.95rem; }
 </style>
 </head>
 <body>
@@ -673,10 +736,11 @@
             <h3>MireStrider</h3>
             <p class="meta">Personal project &middot; Designer, product owner and tester &middot; Built with Claude</p>
             <ul>
-              <li>A custom client for Achaea, a text-based multiplayer game, that turns the game&rsquo;s map into a walkable 3D world with a drop-down terminal for the text.</li>
+              <li>A custom client for Achaea, a text-based multiplayer game, that turns the game&rsquo;s map into a walkable 3D world with a slide-in terminal for the text.</li>
               <li>Includes a scripting engine (aliases, triggers, timers, keybinds, live windows) built on plain JSON rules, with an in-game editor and a test field, so a non-programmer can use it.</li>
-              <li>Built with safety in mind: a master off switch, rate-limited commands, and it never acts unattended. The 3D view is for exploring and travel, and play stays in the terminal.</li>
-              <li>In active development. The engine and windows are built and tested, and live play testing is under way. Source is private and available on request.</li>
+              <li>Built with safety in mind: a master switch that halts the rules, a rate limit on commands sent by rules, and my own project rule of no unattended play. The switch and the limit support that rule but cannot enforce it by themselves. The 3D view is for exploring and travel, and play stays in the terminal.</li>
+              <li>A working project in development. Some features were seen working in an offline check; others are covered only by automated tests, and not every test passes. Source is private.</li>
+              <li><a href="#mirestrider">More about MireStrider below</a></li>
             </ul>
           </div>
         </div>
@@ -880,93 +944,6 @@
   </nav>
 </div>
 
-<section class="project project--wildthing" id="wildthing" aria-labelledby="wildthing-title">
-  <div class="project-inner">
-    <h2 id="wildthing-title">WildThing</h2>
-    <p class="project-lede">A job-search app for Windows and Android. It finds job postings, scores each one against a resume, shows what is missing, hands the writing to the user&rsquo;s own AI assistant, and tracks every application through to an offer.</p>
-
-    <dl class="project-facts">
-      <div><dt>Platforms</dt><dd>Windows desktop and Android</dd></div>
-      <div><dt>License</dt><dd>Free and open source (AGPL-3.0)</dd></div>
-      <div><dt>Built</dt><dd>AI-assisted, with Claude as the coding partner</dd></div>
-    </dl>
-    <a class="project-link" href="https://github.com/wpearson-svg/job_search_app">View the source on GitHub</a>
-
-    <figure>
-      <img src="images/wildthing/01-postings-dark.png" width="1440" height="900" loading="lazy" decoding="async" alt="The Postings page in the dark theme: a ranked list of job postings with match scores and statuses, the selected posting below and progress on the right.">
-    </figure>
-    <p class="project-note">All screenshots use made-up demo data: a sample user and fictional companies.</p>
-
-    <div class="project-group">
-      <h3>What it does</h3>
-
-      <div class="project-item">
-        <h4>Find</h4>
-        <p>One button fetches postings from several sources, including major job boards, USAJOBS, and company boards. Each source can be switched on or off. Any posting can also be pasted in, or shared to the phone app from a browser. Duplicates listed on several sites are merged into one posting that keeps every link, and postings outside the places the user can work are dropped.</p>
-      </div>
-
-      <div class="project-item">
-        <h4>Score</h4>
-        <p>Each posting gets a 0 to 100 match score from the user&rsquo;s master resume and target job titles. The posting page shows exactly why: the skills the resume shows, and what the posting asks for that it doesn&rsquo;t.</p>
-        <figure>
-          <img src="images/wildthing/02-posting-page.png" width="1440" height="1100" loading="lazy" decoding="async" alt="A posting page showing an 85 match score, 8 skills the resume shows, 3 gaps, and buttons that send resume requests to the user&rsquo;s AI.">
-        </figure>
-      </div>
-
-      <div class="project-item">
-        <h4>Close the gaps</h4>
-        <p>A skill the resume doesn&rsquo;t mention but the user really has can be marked &ldquo;I have this&rdquo; and counts from then on. The Gap plan page ranks the gaps across every posting by how often each appears and whether it is required, then asks the user&rsquo;s AI for a study plan sized to the hours available each week.</p>
-        <figure>
-          <img src="images/wildthing/05-gap-plan.png" width="1440" height="900" loading="lazy" decoding="async" alt="The Gap plan page, ranking missing skills across postings by how often each appears and whether it is required.">
-        </figure>
-      </div>
-
-      <div class="project-item">
-        <h4>Apply</h4>
-        <p>Each posting can produce a tailored resume, a cover letter, or interview prep. WildThing never calls an AI itself. It writes a request, either to copy and paste or as a file in a shared folder, and any assistant that can read and write files picks it up. The replies are filed with their postings, and every request tells the AI to use only facts from the user&rsquo;s own resume.</p>
-        <figure>
-          <img src="images/wildthing/06-ai-queue.png" width="1440" height="900" loading="lazy" decoding="async" alt="The AI queue page, showing two requests waiting for the assistant&rsquo;s replies.">
-        </figure>
-      </div>
-
-      <div class="project-item">
-        <h4>Track</h4>
-        <p>Each application moves through Saved, Applied, Phone screen, Interview, and Offer, with dates and notes. Applications with no news after 14 days are flagged for a follow-up, and interviews get calendar links. A weekly summary counts what was sent and what moved forward, as plain text ready to paste into a check-in.</p>
-        <figure>
-          <img src="images/wildthing/03-applications.png" width="1440" height="900" loading="lazy" decoding="async" alt="The Applications page: counts by status, upcoming interviews, and a follow-up flag.">
-        </figure>
-      </div>
-
-      <div class="project-item">
-        <h4>Desktop and phone</h4>
-        <p>The Android app has the same features as the desktop app, and the two stay in step through Google Drive or the user&rsquo;s own WebDAV server. On narrow screens the menu slides over the page and postings become cards.</p>
-        <figure class="project-figure--narrow">
-          <img src="images/wildthing/09-phone-views.png" width="1000" height="900" loading="lazy" decoding="async" alt="Postings and a posting page on a phone-sized screen.">
-        </figure>
-      </div>
-    </div>
-
-    <div class="project-group">
-      <h3>Design decisions</h3>
-      <ul class="project-list">
-        <li><strong>Private by default.</strong> Everything runs on the user&rsquo;s own devices, with no WildThing account, no server, and no tracking. Personal data stays outside the app folder, and keys are never shown again once saved.</li>
-        <li><strong>Bring your own AI.</strong> Calling a model directly would mean an account, a bill, and a resume leaving through a third party. WildThing writes plain-text requests and reads the replies back, so any assistant that can work with files can do the writing, and copy and paste always works.</li>
-        <li><strong>Honest scoring.</strong> The score comes from a skill list, not from a model that might be confidently wrong. The app shows which words matched, so a user can see why a score is what it is and correct it. Its own documentation says it plainly: matching is a word list, not understanding.</li>
-        <li><strong>One behaviour, two apps.</strong> The desktop and Android apps are separate, but they must behave the same, and shared test cases check that they do.</li>
-        <li><strong>Sync without a server.</strong> The two devices share a folder in Google Drive or on any WebDAV server. Changes made on both devices are caught, and the user chooses which to keep.</li>
-        <li><strong>A calm, plain interface.</strong> Forest green and gold, the system font, no emoji, and short sentences that say what happened and what to do next.</li>
-      </ul>
-    </div>
-
-    <div class="project-group">
-      <h3>Tech</h3>
-      <p class="project-text">The desktop app runs locally in Python with a browser interface and a local database. The Android app is written in Kotlin. Both were built with Claude.</p>
-    </div>
-
-    <p class="project-top"><a href="#paths">Back to the tiles</a></p>
-  </div>
-</section>
-
 <section class="project project--isa" id="isa" aria-labelledby="isa-title">
   <div class="project-inner">
     <h2 id="isa-title">Isa</h2>
@@ -1076,6 +1053,354 @@
     <div class="project-group">
       <h3>Outcome</h3>
       <p class="project-text">The client panel selected our solution as the winner. Its feedback singled out the onboarding guide, the content dashboard and the branding.</p>
+    </div>
+
+    <p class="project-top"><a href="#paths">Back to the tiles</a></p>
+  </div>
+</section>
+
+<section class="project project--wildthing" id="wildthing" aria-labelledby="wildthing-title">
+  <div class="project-inner">
+    <h2 id="wildthing-title">WildThing</h2>
+    <p class="project-lede">A job-search app for Windows and Android. It finds job postings, scores each one against a resume, shows what is missing, hands the writing to the user&rsquo;s own AI assistant, and tracks every application through to an offer.</p>
+
+    <dl class="project-facts">
+      <div><dt>Platforms</dt><dd>Windows desktop and Android</dd></div>
+      <div><dt>License</dt><dd>Free and open source (AGPL-3.0)</dd></div>
+      <div><dt>Built</dt><dd>AI-assisted, with Claude as the coding partner</dd></div>
+    </dl>
+    <a class="project-link" href="https://github.com/wpearson-svg/job_search_app">View the source on GitHub</a>
+
+    <figure>
+      <img src="images/wildthing/01-postings-dark.png" width="1440" height="900" loading="lazy" decoding="async" alt="The Postings page in the dark theme: a ranked list of job postings with match scores and statuses, the selected posting below and progress on the right.">
+    </figure>
+    <p class="project-note">All screenshots use made-up demo data: a sample user and fictional companies.</p>
+
+    <div class="project-group">
+      <h3>What it does</h3>
+
+      <div class="project-item">
+        <h4>Find</h4>
+        <p>One button fetches postings from several sources, including major job boards, USAJOBS, and company boards. Each source can be switched on or off. Any posting can also be pasted in, or shared to the phone app from a browser. Duplicates listed on several sites are merged into one posting that keeps every link, and postings outside the places the user can work are dropped.</p>
+      </div>
+
+      <div class="project-item">
+        <h4>Score</h4>
+        <p>Each posting gets a 0 to 100 match score from the user&rsquo;s master resume and target job titles. The posting page shows exactly why: the skills the resume shows, and what the posting asks for that it doesn&rsquo;t.</p>
+        <figure>
+          <img src="images/wildthing/02-posting-page.png" width="1440" height="1100" loading="lazy" decoding="async" alt="A posting page showing an 85 match score, 8 skills the resume shows, 3 gaps, and buttons that send resume requests to the user&rsquo;s AI.">
+        </figure>
+      </div>
+
+      <div class="project-item">
+        <h4>Close the gaps</h4>
+        <p>A skill the resume doesn&rsquo;t mention but the user really has can be marked &ldquo;I have this&rdquo; and counts from then on. The Gap plan page ranks the gaps across every posting by how often each appears and whether it is required, then asks the user&rsquo;s AI for a study plan sized to the hours available each week.</p>
+        <figure>
+          <img src="images/wildthing/05-gap-plan.png" width="1440" height="900" loading="lazy" decoding="async" alt="The Gap plan page, ranking missing skills across postings by how often each appears and whether it is required.">
+        </figure>
+      </div>
+
+      <div class="project-item">
+        <h4>Apply</h4>
+        <p>Each posting can produce a tailored resume, a cover letter, or interview prep. WildThing never calls an AI itself. It writes a request, either to copy and paste or as a file in a shared folder, and any assistant that can read and write files picks it up. The replies are filed with their postings, and every request tells the AI to use only facts from the user&rsquo;s own resume.</p>
+        <figure>
+          <img src="images/wildthing/06-ai-queue.png" width="1440" height="900" loading="lazy" decoding="async" alt="The AI queue page, showing two requests waiting for the assistant&rsquo;s replies.">
+        </figure>
+      </div>
+
+      <div class="project-item">
+        <h4>Track</h4>
+        <p>Each application moves through Saved, Applied, Phone screen, Interview, and Offer, with dates and notes. Applications with no news after 14 days are flagged for a follow-up, and interviews get calendar links. A weekly summary counts what was sent and what moved forward, as plain text ready to paste into a check-in.</p>
+        <figure>
+          <img src="images/wildthing/03-applications.png" width="1440" height="900" loading="lazy" decoding="async" alt="The Applications page: counts by status, upcoming interviews, and a follow-up flag.">
+        </figure>
+      </div>
+
+      <div class="project-item">
+        <h4>Desktop and phone</h4>
+        <p>The Android app has the same features as the desktop app, and the two stay in step through Google Drive or the user&rsquo;s own WebDAV server. On narrow screens the menu slides over the page and postings become cards.</p>
+        <figure class="project-figure--narrow">
+          <img src="images/wildthing/09-phone-views.png" width="1000" height="900" loading="lazy" decoding="async" alt="Postings and a posting page on a phone-sized screen.">
+        </figure>
+      </div>
+    </div>
+
+    <div class="project-group">
+      <h3>Design decisions</h3>
+      <ul class="project-list">
+        <li><strong>Private by default.</strong> Everything runs on the user&rsquo;s own devices, with no WildThing account, no server, and no tracking. Personal data stays outside the app folder, and keys are never shown again once saved.</li>
+        <li><strong>Bring your own AI.</strong> Calling a model directly would mean an account, a bill, and a resume leaving through a third party. WildThing writes plain-text requests and reads the replies back, so any assistant that can work with files can do the writing, and copy and paste always works.</li>
+        <li><strong>Honest scoring.</strong> The score comes from a skill list, not from a model that might be confidently wrong. The app shows which words matched, so a user can see why a score is what it is and correct it. Its own documentation says it plainly: matching is a word list, not understanding.</li>
+        <li><strong>One behaviour, two apps.</strong> The desktop and Android apps are separate, but they must behave the same, and shared test cases check that they do.</li>
+        <li><strong>Sync without a server.</strong> The two devices share a folder in Google Drive or on any WebDAV server. Changes made on both devices are caught, and the user chooses which to keep.</li>
+        <li><strong>A calm, plain interface.</strong> Forest green and gold, the system font, no emoji, and short sentences that say what happened and what to do next.</li>
+      </ul>
+    </div>
+
+    <div class="project-group">
+      <h3>Tech</h3>
+      <p class="project-text">The desktop app runs locally in Python with a browser interface and a local database. The Android app is written in Kotlin. Both were built with Claude.</p>
+    </div>
+
+    <p class="project-top"><a href="#paths">Back to the tiles</a></p>
+  </div>
+</section>
+
+<section class="project project--mirestrider" id="mirestrider" aria-labelledby="mirestrider-title">
+  <div class="project-inner">
+    <h2 id="mirestrider-title">MireStrider</h2>
+    <p class="project-lede">MireStrider is a client for the text game Achaea that turns the game&rsquo;s map into a 3D world I can walk through, with its own terminal, windows, and rules and scripting engine. I built it to see the places I had only read about, and to make my own game tools without having to learn a programming language.</p>
+    <dl class="project-definitions">
+      <div>
+        <dt>Mire</dt>
+        <dd>A deep, muddy bog. The mud is Achaea, a MUD (Multi-User Dungeon). The depth is what the 3D map adds to it.</dd>
+      </div>
+      <div>
+        <dt>Strider</dt>
+        <dd>One who walks with long steps. Here, a new way to travel the game world on that map.</dd>
+      </div>
+    </dl>
+    <p class="project-text">It is made in Godot with GDScript. The look is deliberately stylised.</p>
+    <p class="project-text">The interface screenshots show the client running offline with made-up sample data. No live game session or real character appears in them.</p>
+
+    <div class="project-group">
+      <h3>What it does</h3>
+
+      <div class="project-item">
+        <h4>A walkable 3D map</h4>
+        <div class="selector" role="region" aria-roledescription="carousel" aria-label="A walkable 3D map screenshots" tabindex="0">
+          <button type="button" class="selector-strip selector-strip--prev" data-dir="-1" aria-label="Previous screenshot" hidden>&lsaquo;</button>
+          <div class="selector-stage">
+            <figure class="selector-slide">
+              <a href="images/mirestrider/01_cyrene_overview.webp" aria-label="Open full size: An aerial view of the 3D Cyrene with white buildings, blue roofs, roads and layered mountains behind.">
+                <img src="images/mirestrider/01_cyrene_overview.webp" width="1280" height="720" loading="lazy" decoding="async" alt="An aerial view of the 3D Cyrene with white buildings, blue roofs, roads and layered mountains behind.">
+              </a>
+            </figure>
+            <figure class="selector-slide">
+              <a href="images/mirestrider/02_cyrene_street.webp" aria-label="Open full size: A ground-level street lined with white buildings with columns, and a stone road with pale borders.">
+                <img src="images/mirestrider/02_cyrene_street.webp" width="1280" height="720" loading="lazy" decoding="async" alt="A ground-level street lined with white buildings with columns, and a stone road with pale borders.">
+              </a>
+            </figure>
+            <figure class="selector-slide">
+              <a href="images/mirestrider/03_cyrene_gate.webp" aria-label="Open full size: A white fortress gate with battlements and an iron portcullis raised inside its arch.">
+                <img src="images/mirestrider/03_cyrene_gate.webp" width="1280" height="720" loading="lazy" decoding="async" alt="A white fortress gate with battlements and an iron portcullis raised inside its arch.">
+              </a>
+            </figure>
+            <figure class="selector-slide">
+              <a href="images/mirestrider/04_clock_tower.webp" aria-label="Open full size: A high view of a crossroads with a single doorway standing at its centre among blue-roofed buildings.">
+                <img src="images/mirestrider/04_clock_tower.webp" width="1280" height="720" loading="lazy" decoding="async" alt="A high view of a crossroads with a single doorway standing at its centre among blue-roofed buildings.">
+              </a>
+            </figure>
+          </div>
+          <button type="button" class="selector-strip selector-strip--next" data-dir="1" aria-label="Next screenshot" hidden>&rsaquo;</button>
+          <div class="selector-captions" aria-live="polite">
+            <p class="selector-caption">The client builds each area from map data, so room names and the links between rooms come from the data. I can walk it in first person, open a full map, and take exits that lead to other areas.</p>
+            <p class="selector-caption">In Cyrene, roads run through the streets as continuous ribbons with rounded bends.</p>
+            <p class="selector-caption">Special places can have their own pieces, such as this fortress gate with its portcullis raised.</p>
+            <p class="selector-caption">This is Centre Crossing. The doorway leads into the clock tower, and the tower itself is not modelled yet.</p>
+          </div>
+          <p class="selector-count" aria-hidden="true" hidden>1 of 4</p>
+        </div>
+      </div>
+
+      <div class="project-item">
+        <h4>City theming</h4>
+        <figure>
+          <a href="images/mirestrider/06_theme_compare.webp" aria-label="Open full size: Two aerial views side by side: Cyrene with marble walls and blue roofs, and Ashtan with plain stone walls and red roofs.">
+            <img src="images/mirestrider/06_theme_compare.webp" width="1280" height="720" loading="lazy" decoding="async" alt="Two aerial views side by side: Cyrene with marble walls and blue roofs, and Ashtan with plain stone walls and red roofs.">
+          </a>
+        </figure>
+        <p>A theme file gives a city its materials and fittings: for Cyrene, marble walls, columns, blue hipped roofs and iron fittings. Cyrene is the only theme so far, shown here beside Ashtan without one (two shots combined into one image).</p>
+      </div>
+
+      <div class="project-item">
+        <h4>Distant skylines</h4>
+        <figure>
+          <a href="images/mirestrider/05_vista_stack.webp" aria-label="Open full size: Layers of hazy mountain ridges and building silhouettes fading into the sky beyond a wide stretch of water.">
+            <img src="images/mirestrider/05_vista_stack.webp" width="1280" height="720" loading="lazy" decoding="async" alt="Layers of hazy mountain ridges and building silhouettes fading into the sky beyond a wide stretch of water.">
+          </a>
+        </figure>
+        <p>Flat silhouette layers surround the city and fade into the haze. In Cyrene they change with my position on the map, and the ridges give way to water towards the south. Cyrene is the only area with a skyline file. Using room tags to drive skylines is planned.</p>
+      </div>
+
+      <div class="project-item">
+        <h4>Minimap and full map</h4>
+        <figure>
+          <a href="images/mirestrider/07_minimap_fullmap.webp" aria-label="Open full size: A full-screen room map with a hover box listing the exits of Centre Crossing, and the minimap inset in the corner.">
+            <img src="images/mirestrider/07_minimap_fullmap.webp" width="1280" height="720" loading="lazy" decoding="async" alt="A full-screen room map with a hover box listing the exits of Centre Crossing, and the minimap inset in the corner.">
+          </a>
+        </figure>
+        <p>The minimap stays on screen while I walk, and the M key opens the full map, where hovering over a room lists its exits. The minimap is inset into this picture so both can be seen together.</p>
+      </div>
+
+      <div class="project-item">
+        <h4>The slide-in terminal</h4>
+        <div class="selector" role="region" aria-roledescription="carousel" aria-label="The slide-in terminal screenshots" tabindex="0">
+          <button type="button" class="selector-strip selector-strip--prev" data-dir="-1" aria-label="Previous screenshot" hidden>&lsaquo;</button>
+          <div class="selector-stage">
+            <figure class="selector-slide">
+              <a href="images/mirestrider/08b_terminal_mode.webp" aria-label="Open full size: The full-screen text terminal with a row of window buttons, a coloured list of client features and an entry line, with the minimap and vitals bars down the right.">
+                <img src="images/mirestrider/08b_terminal_mode.webp" width="1280" height="720" loading="lazy" decoding="async" alt="The full-screen text terminal with a row of window buttons, a coloured list of client features and an entry line, with the minimap and vitals bars down the right.">
+              </a>
+            </figure>
+            <figure class="selector-slide">
+              <a href="images/mirestrider/08_terminal_over_3d.webp" aria-label="Open full size: The 3D view with a text terminal down the left side, and a minimap, room information, clock and vitals bars down the right.">
+                <img src="images/mirestrider/08_terminal_over_3d.webp" width="1280" height="720" loading="lazy" decoding="async" alt="The 3D view with a text terminal down the left side, and a minimap, room information, clock and vitals bars down the right.">
+              </a>
+            </figure>
+          </div>
+          <button type="button" class="selector-strip selector-strip--next" data-dir="1" aria-label="Next screenshot" hidden>&rsaquo;</button>
+          <div class="selector-captions" aria-live="polite">
+            <p class="selector-caption">In terminal mode the text fills the screen, with buttons for the windows along the top, an entry line at the bottom, and the minimap and vitals kept on the right. The text in this picture is a sample I wrote to describe the client.</p>
+            <p class="selector-caption">The backquote key shrinks the terminal to a column docked over the 3D view, so incoming text stays visible while I walk, and brings it back again. Vitals, balance and equilibrium sit under the minimap.</p>
+          </div>
+          <p class="selector-count" aria-hidden="true" hidden>1 of 2</p>
+        </div>
+      </div>
+
+      <div class="project-item">
+        <h4>Rules</h4>
+        <p>I can make aliases, triggers, timers, keybinds, reactions to the game&rsquo;s structured data messages (GMCP), functions and script files. Rules are stored as data, and scripts are written in GDScript.</p>
+      </div>
+
+      <div class="project-item">
+        <h4>The rule editor and its test field</h4>
+        <div class="selector" role="region" aria-roledescription="carousel" aria-label="The rule editor and its test field screenshots" tabindex="0">
+          <button type="button" class="selector-strip selector-strip--prev" data-dir="-1" aria-label="Previous screenshot" hidden>&lsaquo;</button>
+          <div class="selector-stage">
+            <figure class="selector-slide">
+              <a href="images/mirestrider/14_rule_editor.webp" aria-label="Open full size: The rule editor showing an alias, with a test line below it and the result listing what matched and what would happen.">
+                <img src="images/mirestrider/14_rule_editor.webp" width="1280" height="720" loading="lazy" decoding="async" alt="The rule editor showing an alias, with a test line below it and the result listing what matched and what would happen.">
+              </a>
+            </figure>
+            <figure class="selector-slide">
+              <a href="images/mirestrider/15_rule_editor_actions.webp" aria-label="Open full size: The rule editor showing four numbered actions: an If test, a send command, a stop and an echo.">
+                <img src="images/mirestrider/15_rule_editor_actions.webp" width="1280" height="720" loading="lazy" decoding="async" alt="The rule editor showing four numbered actions: an If test, a send command, a stop and an echo.">
+              </a>
+            </figure>
+          </div>
+          <button type="button" class="selector-strip selector-strip--next" data-dir="1" aria-label="Next screenshot" hidden>&rsaquo;</button>
+          <div class="selector-captions" aria-live="polite">
+            <p class="selector-caption">Each kind of rule has its own tab. For an alias like this one, I type a sample line and see whether it matches, what it captured and what it would do, before using it for real.</p>
+            <p class="selector-caption">A rule&rsquo;s actions are a numbered list, and an If action can carry on, stop or skip to another step.</p>
+          </div>
+          <p class="selector-count" aria-hidden="true" hidden>1 of 2</p>
+        </div>
+      </div>
+
+      <div class="project-item">
+        <h4>Buttons, bars and layout mode</h4>
+        <div class="selector" role="region" aria-roledescription="carousel" aria-label="Buttons, bars and layout mode screenshots" tabindex="0">
+          <button type="button" class="selector-strip selector-strip--prev" data-dir="-1" aria-label="Previous screenshot" hidden>&lsaquo;</button>
+          <div class="selector-stage">
+            <figure class="selector-slide">
+              <a href="images/mirestrider/17_buttons_bars.webp" aria-label="Open full size: A panel of three buttons at the lower left, and a health bar and target label under the vitals at the right.">
+                <img src="images/mirestrider/17_buttons_bars.webp" width="1280" height="720" loading="lazy" decoding="async" alt="A panel of three buttons at the lower left, and a health bar and target label under the vitals at the right.">
+              </a>
+            </figure>
+            <figure class="selector-slide">
+              <a href="images/mirestrider/16_layout_mode.webp" aria-label="Open full size: Layout mode with a toolbar across the top, a button panel moved to a new place and its position details box open.">
+                <img src="images/mirestrider/16_layout_mode.webp" width="1280" height="720" loading="lazy" decoding="async" alt="Layout mode with a toolbar across the top, a button panel moved to a new place and its position details box open.">
+              </a>
+            </figure>
+          </div>
+          <button type="button" class="selector-strip selector-strip--next" data-dir="1" aria-label="Next screenshot" hidden>&rsaquo;</button>
+          <div class="selector-captions" aria-live="polite">
+            <p class="selector-caption">I can add click buttons, toggles, multi-state buttons, bars and labels, either in free panels or docked under the vitals.</p>
+            <p class="selector-caption">Layout mode lets me drag and resize panels, snap them to a grid, edit exact positions and reset any one of them.</p>
+          </div>
+          <p class="selector-count" aria-hidden="true" hidden>1 of 2</p>
+        </div>
+      </div>
+
+      <div class="project-item">
+        <h4>Packages</h4>
+        <figure>
+          <a href="images/mirestrider/18_packages.webp" aria-label="Open full size: The Packages tab describing an example package with an Install button.">
+            <img src="images/mirestrider/18_packages.webp" width="1280" height="720" loading="lazy" decoding="async" alt="The Packages tab describing an example package with an Install button.">
+          </a>
+        </figure>
+        <p>Rules and scripts can be bundled into one package file to install, switch off or remove. The package format is for rules and definitions, not passwords, character names, variable values or screen layouts.</p>
+      </div>
+
+      <div class="project-item">
+        <h4>Windows fed by game data</h4>
+        <div class="selector" role="region" aria-roledescription="carousel" aria-label="Windows fed by game data screenshots" tabindex="0">
+          <button type="button" class="selector-strip selector-strip--prev" data-dir="-1" aria-label="Previous screenshot" hidden>&lsaquo;</button>
+          <div class="selector-stage">
+            <figure class="selector-slide">
+              <a href="images/mirestrider/09_win_defences.webp" aria-label="Open full size: A status window with two afflictions listed beside twelve defences.">
+                <img src="images/mirestrider/09_win_defences.webp" width="1280" height="720" loading="lazy" decoding="async" alt="A status window with two afflictions listed beside twelve defences.">
+              </a>
+            </figure>
+            <figure class="selector-slide">
+              <a href="images/mirestrider/10_win_inventory.webp" aria-label="Open full size: An inventory window with a backpack opened to show its contents, including a second opened pouch.">
+                <img src="images/mirestrider/10_win_inventory.webp" width="1280" height="720" loading="lazy" decoding="async" alt="An inventory window with a backpack opened to show its contents, including a second opened pouch.">
+              </a>
+            </figure>
+            <figure class="selector-slide">
+              <a href="images/mirestrider/11_win_rift.webp" aria-label="Open full size: An inventory window on its Rift tab, with stored items arranged in columns by group.">
+                <img src="images/mirestrider/11_win_rift.webp" width="1280" height="720" loading="lazy" decoding="async" alt="An inventory window on its Rift tab, with stored items arranged in columns by group.">
+              </a>
+            </figure>
+            <figure class="selector-slide">
+              <a href="images/mirestrider/12_win_room_who.webp" aria-label="Open full size: A room window listing players, creatures and items next to a window listing who is online, grouped by city.">
+                <img src="images/mirestrider/12_win_room_who.webp" width="1280" height="720" loading="lazy" decoding="async" alt="A room window listing players, creatures and items next to a window listing who is online, grouped by city.">
+              </a>
+            </figure>
+            <figure class="selector-slide">
+              <a href="images/mirestrider/13_capture_window.webp" aria-label="Open full size: A small window holding a captured list of vials, with an option to also show it in the terminal.">
+                <img src="images/mirestrider/13_capture_window.webp" width="1280" height="720" loading="lazy" decoding="async" alt="A small window holding a captured list of vials, with an option to also show it in the terminal.">
+              </a>
+            </figure>
+          </div>
+          <button type="button" class="selector-strip selector-strip--next" data-dir="1" aria-label="Next screenshot" hidden>&rsaquo;</button>
+          <div class="selector-captions" aria-live="polite">
+            <p class="selector-caption">The status window lists afflictions and defences side by side and updates as game data arrives.</p>
+            <p class="selector-caption">The inventory opens containers inside containers, with buttons to get, drop and put items.</p>
+            <p class="selector-caption">The Rift tab sorts stored items into columns. It learns which group each item belongs to from the game&rsquo;s own listing when I ask for it.</p>
+            <p class="selector-caption">The room window separates players, creatures and items. The Who window shows the game&rsquo;s online lists, grouped by city on its first tab.</p>
+            <p class="selector-caption">A rule can capture a block of game text into its own window.</p>
+          </div>
+          <p class="selector-count" aria-hidden="true" hidden>1 of 5</p>
+        </div>
+      </div>
+
+      <div class="project-item">
+        <h4>Settings</h4>
+        <figure>
+          <a href="images/mirestrider/19_settings.webp" aria-label="Open full size: The settings window open on its Connection tab with four switches and a button for the logs folder.">
+            <img src="images/mirestrider/19_settings.webp" width="1280" height="720" loading="lazy" decoding="async" alt="The settings window open on its Connection tab with four switches and a button for the logs folder.">
+          </a>
+        </figure>
+        <p>One tabbed settings window gathers the client&rsquo;s options.</p>
+      </div>
+
+      <div class="project-item">
+        <h4>Moving over from Nexus</h4>
+        <p>A converter reads a reflex export from Nexus, the game maker&rsquo;s own client, and writes rules for MireStrider. It reports what it skipped or could only approximate, and every converted rule starts switched off.</p>
+      </div>
+
+      <div class="project-item">
+        <h4>The DO queue</h4>
+        <p>A set of /do commands feeds the game&rsquo;s own command queue as balance and equilibrium return. It replaces a queue package I used in Nexus.</p>
+      </div>
+
+      <div class="project-item">
+        <h4>Safety</h4>
+        <p>A master switch halts the rules. Commands sent by rules share a limit of four a second by default, which I can change globally or for a single rule; the DO queue and my own clicks and typing do not go through that limit. Converted rules start switched off until I turn each one on.</p>
+        <p>My own rule for the project is no unattended play: tools may react to what I do or to what the game sends, and must not play for me. The switch and the limit support that, but they cannot enforce it by themselves.</p>
+      </div>
+    </div>
+
+    <div class="project-group">
+      <h3>How I built it</h3>
+      <p class="project-text">I worked in stages. The rules system was planned as ten numbered stages, from the engine core through variables, each kind of rule, buttons and the editor to the game-data windows, with each stage ending in tests and updated documents before the next began. Later features followed the same habit. The repository&rsquo;s documents are the master record: a design plan, build logs, a dated status file and hand-off notes that let a new session pick up where the last one stopped. I built it with an AI coding partner that wrote the code under written rules: wait to be told, do only what was asked, take location names from the map data, keep passwords and character data out of the repository, and leave all version control to me.</p>
+    </div>
+
+    <div class="project-group">
+      <h3>Current status</h3>
+      <p class="project-text">MireStrider is a working project in development. In an offline check of the current version, the 3D Cyrene, walking, taking an exit to another area, the minimap and full map, the docked terminal, an alias and the rule editor&rsquo;s test field, a toggle button, bars and layout mode were all seen working. The game-data windows, the capture window, the Packages tab and the settings window were seen on screen with sample data. Triggers, timers, keybinds, functions, script files, GMCP reactions, package installing, the DO queue and the Nexus converter are built and covered by automated tests that run without a display; they were not exercised on screen in this check. Of 67 test scripts, 60 passed and 7 did not: 3 need captured game data that is not in the repository, 1 was written for an older version of the map builder, and 3 have failing checks. The MireWisp breadcrumb trail, themes for other cities, the clock tower model, skylines for other areas and tag-driven skylines are planned and not built.</p>
     </div>
 
     <p class="project-top"><a href="#paths">Back to the tiles</a></p>
@@ -1308,6 +1633,61 @@
     }
     loop();
   })();
+</script>
+
+<script>
+  // Image selectors: the side strips, arrow keys and swiping change the
+  // screenshot and the text below it.
+  Array.prototype.forEach.call(document.querySelectorAll('.selector'), function (root) {
+    var slides = root.querySelectorAll('.selector-slide');
+    var captions = root.querySelectorAll('.selector-caption');
+    var prev = root.querySelector('[data-dir="-1"]');
+    var next = root.querySelector('[data-dir="1"]');
+    var count = root.querySelector('.selector-count');
+    var index = 0;
+
+    function show(i) {
+      index = Math.max(0, Math.min(slides.length - 1, i));
+      for (var s = 0; s < slides.length; s++) {
+        slides[s].classList.toggle('is-current', s === index);
+        captions[s].classList.toggle('is-current', s === index);
+      }
+      // Keep keyboard focus in the selector when a strip is about to disable.
+      var focused = document.activeElement;
+      if ((focused === prev && index === 0) || (focused === next && index === slides.length - 1)) {
+        root.focus({ preventScroll: true });
+      }
+      prev.disabled = index === 0;
+      next.disabled = index === slides.length - 1;
+      count.textContent = (index + 1) + ' of ' + slides.length;
+    }
+
+    prev.addEventListener('click', function () { show(index - 1); });
+    next.addEventListener('click', function () { show(index + 1); });
+    root.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowRight') { e.preventDefault(); show(index + 1); }
+      else if (e.key === 'ArrowLeft') { e.preventDefault(); show(index - 1); }
+    });
+
+    var stage = root.querySelector('.selector-stage');
+    var startX = null;
+    var startY = null;
+    stage.addEventListener('touchstart', function (e) {
+      startX = e.touches.length === 1 ? e.touches[0].clientX : null;
+      startY = e.touches[0].clientY;
+    }, { passive: true });
+    stage.addEventListener('touchend', function (e) {
+      if (startX === null) return;
+      var dx = e.changedTouches[0].clientX - startX;
+      var dy = e.changedTouches[0].clientY - startY;
+      if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) show(index + (dx < 0 ? 1 : -1));
+      startX = null;
+    }, { passive: true });
+
+    root.classList.add('is-ready');
+    prev.hidden = next.hidden = count.hidden = false;
+    show(0);
+  });
 </script>
 
 </body>
